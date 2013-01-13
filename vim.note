@@ -1,0 +1,85 @@
+
+type ctrl-\ s : show all uses of the symbol
+
+cscope:
+f = find
+s = use of symbol
+g = global definition
+c = calls to function
+f = open the filename under the cursor
+
+cscope -d : not to regenerate the database
+cscope -b -q -k: only build db, inverted index, not look /usr/include
+
+#example
+    LNX=/home/jru/linux-2.4.18
+    cd / 	
+    find  $LNX                                                                \
+	-path "$LNX/arch/*" ! -path "$LNX/arch/i386*" -prune -o               \
+	-path "$LNX/include/asm-*" ! -path "$LNX/include/asm-i386*" -prune -o \
+	-path "$LNX/tmp*" -prune -o                                           \
+	-path "$LNX/Documentation*" -prune -o                                 \
+	-path "$LNX/scripts*" -prune -o                                       \
+	-path "$LNX/drivers*" -prune -o                                       \
+        -name "*.[chxsS]" -print >/home/jru/cscope/cscope.files
+
+
+trinity
+
+EnhancedCommentify
+SuperTab
+taglist
+tabbar: : Alt-1 Alt-2
+AutoExplorer help
+bufexplorer  : \be \bv \bs
+
+" au! QuickFixCmdPre *.[ch] call Search_Word() 
+func Search_Word() 
+  let w = expand("<cword>")
+  exe "vimgrep " w " *.c *.h" 
+  exe 'copen' 
+endfun
+
+$ctags -R -h ".h.c.cpp.java"
+download taglist
+map <f9> :Tlist<CR>
+
+:Ex, [[,]], :tab sp
+User-manual
+http://vimdoc.sourceforge.net/htmldoc/usr_toc.html
+tab-pages
+http://vim.wikia.com/wiki/Using_tab_pages
+http://vim.wikia.com/wiki/Quick_tips_for_using_tab_pages
+
+screen: Ctrl+Page Down/Up
+
+vim:
+  help
+      helpgrep, help v_, i_, c_, :, ''
+  Normal Mode command
+  Visual Mode command  v_
+  Insert Mode Command  i_
+  Command-line command :
+  Command-line editing c_
+  option               ''
+
+  repeat single change: ., @:
+  repeat change on pattern matched:
+              g/{pattern}/{cmd}, g/pattern/normal {cmd}
+             %s/{pattern}/{cmd}
+  repeat multiple changes using record:
+          qq: record typing in reg
+          @q: execute reg,eg 99@q, 99@@
+	  :@q: execute reg as Ex command, :@@, :@:
+  vim script:
+          :so {file}: Read Ex Command from {file}
+          :so! {file}: Read Normal Mode Command from {file}
+  vim -e -s : Ex Mode,Silent Mode
+  vim -s script file.txt
+  Find: gD
+  register: "ap, "ayy, @a
+            "AY // Uppercase means append
+  Range: line,pattern,mark('a)
+  Ex Mode:
+  Paste Word under Cursor: <C-r><C-w>
+  Paste register content: <C-r><register>
