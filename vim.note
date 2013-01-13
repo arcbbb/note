@@ -79,7 +79,12 @@ vim:
   Find: gD
   register: "ap, "ayy, @a
             "AY // Uppercase means append
+      paste register in Command-line editing: <C-r><reg>
   Range: line,pattern,mark('a)
   Ex Mode:
   Paste Word under Cursor: <C-r><C-w>
   Paste register content: <C-r><register>
+  Filter commands:
+      {range}!{filter}    // replace with output
+      {range}r !{cmd}  // insert output of command below the cursor
+      {range}w !{cmd}

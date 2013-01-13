@@ -1,3 +1,6 @@
+Git User's Manual
+http://www.kernel.org/pub/software/scm/git/docs/v1.7.3/user-manual.html#resolving-a-merge
+
 http://www.landley.net/writing/git-bisect-howto.html
 $ git svn clone https://edk2.svn.sourceforge.net/svnroot/edk2/trunk/edk2
 $ GIT_TRACE=1 git svn fetch
@@ -66,6 +69,12 @@ Unmodified <--1 Modified <--2 Staged <--3 Commit
 	rewrite a large number of commits
 	$ git filter-branch
 
+################# Git Hub
+	$ git clone https://github.com/arcbbb/note.git
+	git remote rm github_note
+	git remote add github_note https://github.com/arcbbb/note.git
+	git remote set-url github_note https://arcbbb@github.com/arcbbb/note.git
+	git push github_note master
 ################# Concept
 File, Commit/Snapshot, Branch, Repository
 
