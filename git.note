@@ -1,0 +1,36 @@
+http://www.landley.net/writing/git-bisect-howto.html
+$ git svn clone https://edk2.svn.sourceforge.net/svnroot/edk2/trunk/edk2
+$ GIT_TRACE=1 git svn fetch
+
+################# Concept
+File, Commit/Snapshot, Branch, Repository
+
+Commit/Snapshot
+    tag commit:
+    $ git tag v2.5 <SHA-1>
+    HEAD:    last commit
+    HEAD^,HEAD~1:    parent of HEAD
+    HEAD^1, HEAD^2 // for merge commit:    parent 1&2
+    HEAD..HEAD^  : exclude HEAD, show HEAD^ diff
+    HEAD...HEAD^ : exclude common, show both diff
+
+Branch: trace of commit
+################# Git gittutorial
+
+pull = fetch & merge
+
+Repository operation: 
+    git clone <dir> <branch>
+    git remote <r_name> <dir>
+branch operation:
+    git  pull <dir> <branch>
+        $ git pull
+        // pull from where it clone, look at config remote.origin.url
+
+    git fetch <dir> <branch>
+        $ git fetch <r_name>/<branch>
+	$ git log -p HEAD..FETCH_HEAD
+
+name: branch, commit(SHA-1), file, HEAD(commit)
+
+################# Git gitworkflows
