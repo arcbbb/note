@@ -1,6 +1,70 @@
 http://www.landley.net/writing/git-bisect-howto.html
 $ git svn clone https://edk2.svn.sourceforge.net/svnroot/edk2/trunk/edk2
 $ GIT_TRACE=1 git svn fetch
+#### FILE STATUS
+
+untracked <----> tracked
+$ git add/rm
+
+modified file ----> staged file
+$ git add
+
+$ git status
+modified, staged
+
+unstaged(git diff) --> staged(git status) --> commit
+crafting commit
+
+##### LOG
+$ git log -p -2
+$ git log --stat
+$ git log --pretty
+##### DIFF 
+$ git diff --cached
+
+#### UNDO
+
+Unmodified <--1 Modified <--2 Staged <--3 Commit
+
+	1. Modified -> Unmodified file
+		$ git checkout -- <filename>
+
+	2. Staged -> Modified file
+		$ git reset HEAD <filename>
+
+	3. Last Commit
+		$ git commit
+		$ git add ... // fix last commit
+		$ git commit --amend
+#### BRANCH
+	HEAD: tell what branch is currently on.
+	HEAD: points to 'master'
+	1. Branch Create
+		$ git branch <branchname>
+	2. Branch Delete
+		$ git branch -d <branchname>
+	3. Branch Switch
+		$ git checkout <branchname>
+		HEAD: points to 'branchname'
+#Note1: 'git stash' uncommited changes before branch switch
+#Note2: or 'git commit -a', then 'git reset' undo this commit
+	4. Branch Create & Switch: -b
+		$ git checkout -b <branchname>
+		HEAD: points to 'branchname'
+#### MERGE
+#Note: Commit Object
+	1. Merge Commit
+	more than 1 parents, find common ancestor
+#### REBASE  3.6
+#### REWRITE History
+	reorder/remove commits
+	$ git rebase -i
+	squash/split apart commits
+	$ git reset
+	$ git commit
+	$ git rebase
+	rewrite a large number of commits
+	$ git filter-branch
 
 ################# Concept
 File, Commit/Snapshot, Branch, Repository
