@@ -34,3 +34,12 @@ branch operation:
 name: branch, commit(SHA-1), file, HEAD(commit)
 
 ################# Git gitworkflows
+
+##### http://ihower.tw/git/files/ihower-git.pdf
+Git Clone
+SSH: $ git clone git@github.com:arcbbb/note.git
+HTTP/HTTPS  $ git clone https://arcbbb@github.com/arcbbb/note.git
+Git Protocol: fastest, read-only
+$ git clone git://github.com/arcbbb/note.git
+File
+reference:https://github.com/schacon/git-presentations
