@@ -89,7 +89,7 @@ vim:
       {range}r !{cmd}  // insert output of command below the cursor
       {range}w !{cmd}
 vim today:01/14
-    [usr_24.txt] insert quickly
+[usr_24.txt] insert quickly
     use r & b moving
     insert mode: repeat <C-a>, repeat & exit insert <C-@>
                  repeat previous/next line <C-y>, <C-e>
@@ -109,3 +109,20 @@ vim today:01/14
     page: <C-e>/<C-y>, <C-d>/<C-u>
     word: w,b: e,ge, start/end of word
     char: fx,tx  :find/to
+vim today:01/15
+[usr_07] editing more than one file
+    file switch[C-^]
+[usr_08] Splitting windows
+    vim diff: :diffupdate, dp, do
+    tab pages:
+[usr_04]  Making small changes
+    help WORD
+    motion object:
+    Text objects:
+	    A Word: aw
+	    Sentence: Inner(is), as
+    copy&paste: delete:d{object},dd
+    in-place change:c{object},cc
+    shortcuts: x|X,D|C,s|S
+
+    replace: r

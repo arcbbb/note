@@ -1,4 +1,8 @@
 1. write INF
+   determine include header in Autogen.h
+   firmware type in FDF
+
+   ####BaseTool/Source/Python/AutoGen/GenC.py
     MODULE_TYPE: UEFI_DRIVER, DXE_SMM_DRIVER
         affect: autogen.h #include default header
     "BASE"              :   [gBasicHeaderFile],
@@ -18,19 +22,9 @@
 
     "SMM_CORE"          :   ["PiDxe.h", "Library/BaseLib.h", "Library/DebugLib.h", "Library/UefiDriverEntryPoint.h"],
 
-        fdf [Rule] -> file type
-        genffs -> 
-        'SEC'               : 'EFI_FV_FILETYPE_SECURITY_CORE',
-        'PEI_CORE'          : 'EFI_FV_FILETYPE_PEI_CORE',
-        'PEIM'              : 'EFI_FV_FILETYPE_PEIM',
-        'DXE_CORE'          : 'EFI_FV_FILETYPE_DXE_CORE',
-        'DXE_DRIVER'        : 'EFI_FV_FILETYPE_DRIVER',
-        'DXE_SAL_DRIVER'    : 'EFI_FV_FILETYPE_DRIVER',
-        'DXE_SMM_DRIVER'    : 'EFI_FV_FILETYPE_DRIVER',
-        'DXE_RUNTIME_DRIVER': 'EFI_FV_FILETYPE_DRIVER',
-        'UEFI_DRIVER'       : 'EFI_FV_FILETYPE_DRIVER',
-        'UEFI_APPLICATION'  : 'EFI_FV_FILETYPE_APPLICATION',
-        'SMM_CORE'          : 'EFI_FV_FILETYPE_SMM_CORE'
+   ####Grantley:PlatformPkg.fdf
+    [Rule.Common.DXE_SMM_DRIVER]
+    FILE SMM
 
         PeiDispatcher
 	   else if (SearchType == PEI_CORE_INTERNAL_FFS_FILE_DISPATCH_TYPE) {
@@ -56,10 +50,16 @@
 		  //
 		};
 
-compile time:*.c *.h
-link time: .inf, .dec,   //needs reparsing
+2. compile time:*.c *.h
+3. link time: .inf, .dec,   //needs reparsing
      missing guid: add in .inf
      	if producer, define in .dec
+4. remove SCT dependency:8
+	inf depex,
+	    4.1 grep OPTIN_, CONFIG_
+	.c MACRO -> PcdGet
+        .inf, .dec define Pcd
+	.dsc how to override Pcd?
 move to SCT:
 	Dxe\Setup\IpmiManager.vfr   // recover vfrcompile
 
@@ -131,6 +131,8 @@ Replace: 1.find 2.grep 3.awk 4. ex -s
     EFI_TPL_CALLBACK        -> TPL_CALLBACK
     EFI_TPL_NOTIFY          -> TPL_NOTIFY
     PEI_CPU_IO_PPI          -> EFI_PEI_CPU_IO_PPI
+    memcpy                  -> CopyMem //Initializing local variables, such as arrays or structures can
+                                       //sometimes lead to the compiler inserting a memcpy.
 
 Override
     SCT_STATUS_INVALID_DATA      ->  EFI_INVALID_PARAMETER #CommonPorting.h
@@ -179,9 +181,7 @@ VfrCompile
 #### SMM
     SmmMemoryAllocationLib
     SmmServicesTableLibConstructor
-#### Win cl
-/FAcs:
-Initializing local variables, such as arrays or structures can
-sometimes lead to the compiler inserting a memcpy.
-/Wall
-/WX
+    EfiInitializeSmmDriverLib    -> dont trigger into SMM 
+    how to use gSmst?  eg:
+    MdeModulePkg/Universal/Acpi/SmmS3SaveState
+    IntelFrameworkPkg/Library/DxeSmmDriverEntryPoint
