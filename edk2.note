@@ -1,3 +1,67 @@
+1. write INF
+    MODULE_TYPE: UEFI_DRIVER, DXE_SMM_DRIVER
+        affect: autogen.h #include default header
+    "BASE"              :   [gBasicHeaderFile],
+    "USER_DEFINED"      :   [gBasicHeaderFile]
+    "SEC"               :   ["PiPei.h", "Library/DebugLib.h"],
+    "PEI_CORE"          :   ["PiPei.h", "Library/DebugLib.h", "Library/PeiCoreEntryPoint.h"],
+    "PEIM"              :   ["PiPei.h", "Library/DebugLib.h", "Library/PeimEntryPoint.h"],
+    "DXE_CORE"          :   ["PiDxe.h", "Library/DebugLib.h", "Library/DxeCoreEntryPoint.h"],
+
+     with "Library/UefiBootServicesTableLib.h", "Library/UefiDriverEntryPoint.h"],
+    "DXE_DRIVER"        :   ["PiDxe.h", "Library/BaseLib.h", "Library/DebugLib.h", 
+    "DXE_SMM_DRIVER"    :   ["PiDxe.h", "Library/BaseLib.h", "Library/DebugLib.h",
+    "DXE_RUNTIME_DRIVER":   ["PiDxe.h", "Library/BaseLib.h", "Library/DebugLib.h",
+    "DXE_SAL_DRIVER"    :   ["PiDxe.h", "Library/BaseLib.h", "Library/DebugLib.h"
+    "UEFI_DRIVER"       :   ["Uefi.h",  "Library/BaseLib.h", "Library/DebugLib.h", 
+    "UEFI_APPLICATION"  :   ["Uefi.h",  "Library/BaseLib.h", "Library/DebugLib.h","Library/UefiApplicationEntryPoint.h"],
+
+    "SMM_CORE"          :   ["PiDxe.h", "Library/BaseLib.h", "Library/DebugLib.h", "Library/UefiDriverEntryPoint.h"],
+
+        fdf [Rule] -> file type
+        genffs -> 
+        'SEC'               : 'EFI_FV_FILETYPE_SECURITY_CORE',
+        'PEI_CORE'          : 'EFI_FV_FILETYPE_PEI_CORE',
+        'PEIM'              : 'EFI_FV_FILETYPE_PEIM',
+        'DXE_CORE'          : 'EFI_FV_FILETYPE_DXE_CORE',
+        'DXE_DRIVER'        : 'EFI_FV_FILETYPE_DRIVER',
+        'DXE_SAL_DRIVER'    : 'EFI_FV_FILETYPE_DRIVER',
+        'DXE_SMM_DRIVER'    : 'EFI_FV_FILETYPE_DRIVER',
+        'DXE_RUNTIME_DRIVER': 'EFI_FV_FILETYPE_DRIVER',
+        'UEFI_DRIVER'       : 'EFI_FV_FILETYPE_DRIVER',
+        'UEFI_APPLICATION'  : 'EFI_FV_FILETYPE_APPLICATION',
+        'SMM_CORE'          : 'EFI_FV_FILETYPE_SMM_CORE'
+
+        PeiDispatcher
+	   else if (SearchType == PEI_CORE_INTERNAL_FFS_FILE_DISPATCH_TYPE) {
+		if ((FfsFileHeader->Type == EFI_FV_FILETYPE_PEIM) ||
+		    (FfsFileHeader->Type == EFI_FV_FILETYPE_COMBINED_PEIM_DRIVER) ||
+		    (FfsFileHeader->Type == EFI_FV_FILETYPE_FIRMWARE_VOLUME_IMAGE)) {
+
+        Dxe:CoreDispatcher
+		EFI_FV_FILETYPE mDxeFileTypes[] = {
+		  EFI_FV_FILETYPE_DRIVER,
+		  EFI_FV_FILETYPE_COMBINED_SMM_DXE,
+		  EFI_FV_FILETYPE_COMBINED_PEIM_DRIVER,
+		  EFI_FV_FILETYPE_DXE_CORE,
+		  EFI_FV_FILETYPE_FIRMWARE_VOLUME_IMAGE
+		};
+        SmmDispatcher
+		EFI_FV_FILETYPE mSmmFileTypes[] = {
+		  EFI_FV_FILETYPE_SMM,
+		  EFI_FV_FILETYPE_COMBINED_SMM_DXE
+		  //
+		  // Note: DXE core will process the FV image file, so skip it in SMM core
+		  // EFI_FV_FILETYPE_FIRMWARE_VOLUME_IMAGE
+		  //
+		};
+
+compile time:*.c *.h
+link time: .inf, .dec,   //needs reparsing
+     missing guid: add in .inf
+     	if producer, define in .dec
+move to SCT:
+	Dxe\Setup\IpmiManager.vfr   // recover vfrcompile
 
 #### From EDK1 to EDK2
 
@@ -112,4 +176,12 @@ Structure Changed
     ACPI_RESOURCE_HEADER_PTR  -> no raw member
 VfrCompile
     exportdefaults
-    DXEMainBSS
+#### SMM
+    SmmMemoryAllocationLib
+    SmmServicesTableLibConstructor
+#### Win cl
+/FAcs:
+Initializing local variables, such as arrays or structures can
+sometimes lead to the compiler inserting a memcpy.
+/Wall
+/WX

@@ -88,3 +88,24 @@ vim:
       {range}!{filter}    // replace with output
       {range}r !{cmd}  // insert output of command below the cursor
       {range}w !{cmd}
+vim today:01/14
+    [usr_24.txt] insert quickly
+    use r & b moving
+    insert mode: repeat <C-a>, repeat & exit insert <C-@>
+                 repeat previous/next line <C-y>, <C-e>
+		 move: <C>/<S>+left,right
+		 undo: <C-w>,<C-u>
+                 completion: <C-p>, <C-x><C-o>
+		 paste register: <C-r>, <C-r><C-r>
+		 abbrev: :ia <x> <y>,:iuna,:iabc   
+		 //:ab, :una, :abc or command line mode
+		 map: :imap, :inorea
+		 enter special word: <C-v> x41
+		 excute Normal mode: <C-o>
+    [usr_03.txt] move around 
+    line: 0,^,$: first char, first non-blank
+    line number: G
+    screen: 50%, H,M,L
+    page: <C-e>/<C-y>, <C-d>/<C-u>
+    word: w,b: e,ge, start/end of word
+    char: fx,tx  :find/to
