@@ -1,29 +1,4 @@
 
-type ctrl-\ s : show all uses of the symbol
-
-cscope:
-f = find
-s = use of symbol
-g = global definition
-c = calls to function
-f = open the filename under the cursor
-
-cscope -d : not to regenerate the database
-cscope -b -q -k: only build db, inverted index, not look /usr/include
-
-#example
-    LNX=/home/jru/linux-2.4.18
-    cd / 	
-    find  $LNX                                                                \
-	-path "$LNX/arch/*" ! -path "$LNX/arch/i386*" -prune -o               \
-	-path "$LNX/include/asm-*" ! -path "$LNX/include/asm-i386*" -prune -o \
-	-path "$LNX/tmp*" -prune -o                                           \
-	-path "$LNX/Documentation*" -prune -o                                 \
-	-path "$LNX/scripts*" -prune -o                                       \
-	-path "$LNX/drivers*" -prune -o                                       \
-        -name "*.[chxsS]" -print >/home/jru/cscope/cscope.files
-
-
 trinity
 
 EnhancedCommentify
@@ -33,6 +8,7 @@ tabbar: : Alt-1 Alt-2
 AutoExplorer help
 bufexplorer  : \be \bv \bs
 
+######################################################################
 " au! QuickFixCmdPre *.[ch] call Search_Word() 
 func Search_Word() 
   let w = expand("<cword>")
@@ -51,9 +27,12 @@ tab-pages
 http://vim.wikia.com/wiki/Using_tab_pages
 http://vim.wikia.com/wiki/Quick_tips_for_using_tab_pages
 
-screen: Ctrl+Page Down/Up
-
+######################################################################
 vim:
+  Tab
+      :set tabline 	
+      next/prevous tab: gt,gT
+      jump tab: {num}gt
   help
       helpgrep, help v_, i_, c_, :, ''
   Normal Mode command
@@ -88,6 +67,7 @@ vim:
       {range}!{filter}    // replace with output
       {range}r !{cmd}  // insert output of command below the cursor
       {range}w !{cmd}
+######################################################################
 vim today:01/14
 [usr_24.txt] insert quickly
     use r & b moving
@@ -116,19 +96,25 @@ vim today:01/15
     vim diff: :diffupdate, dp, do
     tab pages:
 [usr_04]  Making small changes
-    help WORD
-    motion object:
-    Text objects:
-	    A Word: aw
-	    Sentence: Inner(is), as
-    copy&paste: delete:d{object},dd
-    in-place change:c{object},cc
-    shortcuts: x|X,D|C,s|S
+    motion object,Text objects:
+        |WORD| non-blank
+        |word| letter,digit,underscore
+        inner word: when counting
+        A word
+    delete&cut:    d{object},dd      Shortcuts: dl:x, d$|D,dh:X
+    change&insert: c{object},cc      Shortcuts: cl:s, c$|C,cc|S
+    join: J,gJ
 
     replace: r
     command-line window: q:, press ENTER to execute
-# The Ultimate Vimrc
-#reference: http://amix.dk/vim/vimrc.html
-git clone git://github.com/amix/vimrc.git ~/.vim_runtime
-sh ~/.vim_runtime/install_awesome_vimrc.sh
-#https://github.com/amix/vimrc
+    Reference:
+        # The Ultimate Vimrc
+        #reference: http://amix.dk/vim/vimrc.html
+        git clone git://github.com/amix/vimrc.git ~/.vim_runtime
+        sh ~/.vim_runtime/install_awesome_vimrc.sh
+        #https://github.com/amix/vimrc
+        # extension: https://github.com/jistr/vim-nerdtree-tabs
+
+vim today:01/16
+[change.txt]
+    Buffer Explorer, TAB, NERDTREE

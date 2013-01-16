@@ -1,0 +1,7 @@
+
+info sed
+
+Execution Cycle:
+Pattern space: delete between cycles
+Hold space: keeps data between cycles
+     move data between both buffers: `h', `H', `x', `g', `G' 

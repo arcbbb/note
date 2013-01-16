@@ -117,6 +117,7 @@ GetNextGuidHob
 
 #### Syntax Change
 Replace: 1.find 2.grep 3.awk 4. ex -s
+Macro,Enum Change
     SCT_STATUS
     SCT_STATUS_NOT_FOUND
     SCT_STATUS_SUCCESS
@@ -130,9 +131,7 @@ Replace: 1.find 2.grep 3.awk 4. ex -s
     EFI_TPL_HIGH_LEVEL      -> TPL_HIGH_LEVEL
     EFI_TPL_CALLBACK        -> TPL_CALLBACK
     EFI_TPL_NOTIFY          -> TPL_NOTIFY
-    PEI_CPU_IO_PPI          -> EFI_PEI_CPU_IO_PPI
-    memcpy                  -> CopyMem //Initializing local variables, such as arrays or structures can
-                                       //sometimes lead to the compiler inserting a memcpy.
+    _CR                     -> BASE_CR @Base.h, CR @DebugLib.h
 
 Override
     SCT_STATUS_INVALID_DATA      ->  EFI_INVALID_PARAMETER #CommonPorting.h
@@ -154,34 +153,40 @@ MACRO related:
 Guid C name changed:
     gEfiRscHandlerPpiGuid       -> gEfiPeiRscHandlerPpiGuid
     gPeiReadOnlyVariablePpiGuid -> gEfiPeiReadOnlyVariable2PpiGuid
+    gPeiStallPpiGuid            -> gEfiPeiStallPpiGuid
 
 TYPE Changed:
     EFI_RSC_HANDLER_PPI        -> EFI_PEI_RSC_HANDLER_PPI
     PEI_READ_ONLY_VARIABLE_PPI -> EFI_PEI_READ_ONLY_VARIABLE2_PPI
+    PEI_STALL_PPI              -> EFI_PEI_STALL_PPI
+    PEI_CPU_IO_PPI             -> EFI_PEI_CPU_IO_PPI
+Qualifier:
+    EFI_PEI_SERVICES           -> CONST EFI_PEI_SERVICES
+
 FLAG Changed:
     ## Boot Service
     CreateEvent():
 Service Changed:
-	PeiGetVariable        -> GetVariable   *arg
+    PeiGetVariable        -> GetVariable   *arg
+	
 Library Changed:
     EfiLibGetSystemConfigurationTable -> EfiGetSystemConfigurationTable //is it the same?
     EfiLibAllocateZeroPool   -> AllocateZeroPool #include <Library/MemoryAllocationLib.h>
     EfiLibAllocatePool       -> AllocatePool     #include <Library/MemoryAllocationLib.h>
     EfiCopyMem               -> CopyMem          #include <Library/BaseMemoryLib.h> MdePkg
+    memcpy                   -> CopyMem //Initializing local variables, such as arrays or structures can
+                                       //sometimes lead to the compiler inserting a memcpy.
     EfiStrCmp(CHAR16,CHAR16) -> StrCmp           #BaseLib MdePkg
     GetPeiServices           -> GetPeiServicesTablePointer  #include <Library/PeiServicesTablePointerLib.h>
     GetNextGuidHob(x,y,z,w)  -> GetNextGuidHob(x,y)
     IsConfigHdrMatch         -> HiiIsConfigHdrMatch #IfrSupport -> HiiLib.h MdeModulePkg
     HexStringToBuf(UINT8,CHAR16) -> UnicodeStrToAsciiStr(CHAR16,CHAR8) #BaseLib MdePkg
 
-Structure Changed
+Structure Member Changed
     ACPI_RESOURCE_HEADER_PTR  -> no raw member
+
 VfrCompile
     exportdefaults
-#### SMM
-    SmmMemoryAllocationLib
-    SmmServicesTableLibConstructor
+
+SMM
     EfiInitializeSmmDriverLib    -> dont trigger into SMM 
-    how to use gSmst?  eg:
-    MdeModulePkg/Universal/Acpi/SmmS3SaveState
-    IntelFrameworkPkg/Library/DxeSmmDriverEntryPoint

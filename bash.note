@@ -1,0 +1,6 @@
+
+function name() {cmd;}
+name() { cmd;}
+declare -F
+declare -f
+unset -f
