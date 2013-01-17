@@ -118,3 +118,36 @@ vim today:01/15
 vim today:01/16
 [change.txt]
     Buffer Explorer, TAB, NERDTREE
+vim today:01/17
+|usr_44.txt|
+    example: $VIMRUNTIME/syntax
+    List defined items:syntax
+        :syntax list {group-name}
+    Define a keyword:
+        :syntax keyword {group} {keyword} ...
+	:syntax match   {group} /pattern/
+	:syntax region  {group} start=/pat/ skip=/pat/ end=/pat/
+	eg. :syntax region  {group} start=/"/ skip=/\"/ end=/"/
+	eg. :syntax keyword      xType    int long char
+	eg. :syntax   match   xComment            /#.*/
+	:hi link {new_group} {exist_group}
+	work with every color scheme:
+	:hi define link nameString String
+    Adding to an existing syntax file:
+        syntax/{the same filename}.vim
+    Adding a filetype: filetype.vim, scripts.vim
+        1. runtimpath/filetype.vim
+        autocommand|40.3| augroup filetypedetect
+        au BufNewfile,BufRead *.xyz setf xyz
+        augroup END
+        2. runtimpath/scripts.vim: #!/bin/xyz 
+        if did_filetype()
+	    finish
+        endif
+        if getline(1) =~ '^#!.*[/\\]xyz\>'
+            setf xyz
+        endif
+    session
+	:mks a.vim
+	vim -S a.vim
+    search  #,*, /,? gd,gD

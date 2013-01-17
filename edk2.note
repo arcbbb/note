@@ -51,6 +51,7 @@
 		};
 
 2. compile time:*.c *.h
+	 google the old code, and compare with the new code
 3. link time: .inf, .dec,   //needs reparsing
      missing guid: add in .inf
      	if producer, define in .dec
@@ -128,6 +129,7 @@ Macro,Enum Change
     SCT_STATUS_UNSUPPORTED
     SCT_STATUS_OUT_OF_RESOURCES
     EFI_EVENT_NOTIFY_SIGNAL -> EVT_NOTIFY_SIGNAL
+    EFI_EVENT_TIMER         -> EVT_TIMER
     EFI_TPL_HIGH_LEVEL      -> TPL_HIGH_LEVEL
     EFI_TPL_CALLBACK        -> TPL_CALLBACK
     EFI_TPL_NOTIFY          -> TPL_NOTIFY
@@ -170,17 +172,31 @@ Service Changed:
     PeiGetVariable        -> GetVariable   *arg
 	
 Library Changed:
-    EfiLibGetSystemConfigurationTable -> EfiGetSystemConfigurationTable //is it the same?
+
     EfiLibAllocateZeroPool   -> AllocateZeroPool #include <Library/MemoryAllocationLib.h>
     EfiLibAllocatePool       -> AllocatePool     #include <Library/MemoryAllocationLib.h>
-    EfiCopyMem               -> CopyMem          #include <Library/BaseMemoryLib.h> MdePkg
+    EfiCopyMem, EfiCommonLibCopyMem  -> CopyMem          #include <Library/BaseMemoryLib.h> MdePkg
+    EfiZeroMem               -> ZeroMem
     memcpy                   -> CopyMem //Initializing local variables, such as arrays or structures can
                                        //sometimes lead to the compiler inserting a memcpy.
     EfiStrCmp(CHAR16,CHAR16) -> StrCmp           #BaseLib MdePkg
+
+    EfiLibGetSystemConfigurationTable -> EfiGetSystemConfigurationTable //is it the same?
     GetPeiServices           -> GetPeiServicesTablePointer  #include <Library/PeiServicesTablePointerLib.h>
+
     GetNextGuidHob(x,y,z,w)  -> GetNextGuidHob(x,y)
-    IsConfigHdrMatch         -> HiiIsConfigHdrMatch #IfrSupport -> HiiLib.h MdeModulePkg
+
     HexStringToBuf(UINT8,CHAR16) -> UnicodeStrToAsciiStr(CHAR16,CHAR8) #BaseLib MdePkg
+    sprintf, SPrint          -> UnicodeSPrint, AsciiSPrint  #Library/PrintLib.h MdePkg
+Hii
+    IsConfigHdrMatch                    -> HiiIsConfigHdrMatch  #IfrSupport -> HiiLib.h MdeModulePkg
+    IfrLibSetString(1,2,3)              -> HiiSetString (1,2,3,NULL);
+    IfrLibNewString                     -> Id = HiiSetString (1,2,NULL)
+    HiiLibCreatePackageListDriverHandle -> InstallMultipleProtocols
+    HiiLibGetPackage                    -> buggy function
+    PreparePackageList, NewPackageList  -> HiiAddPackage
+    HiiLibIfrCreateOpcode               -> HiiAllocateOpCodeHandle 
+                                           HiiCreate.*OpCode 
 
 Structure Member Changed
     ACPI_RESOURCE_HEADER_PTR  -> no raw member
@@ -190,3 +206,7 @@ VfrCompile
 
 SMM
     EfiInitializeSmmDriverLib    -> dont trigger into SMM 
+
+AcpiLibDuplicateResources
+AcpiLibAppendIoPortResource
+asctime_r
