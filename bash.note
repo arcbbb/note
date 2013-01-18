@@ -4,3 +4,23 @@ name() { cmd;}
 declare -F
 declare -f
 unset -f
+
+command-line editing:
+C-a/C-e: begin/end of line
+C-f/C-b: one char f/b movement
+M-f/M-b: one word f/b movement
+M-d/C-w: delete one word
+C-u/C-k: delete to the begin or end of line from cursor
+C-y: paste the deleted
+
+History:
+fc: Fix command
+history:
+
+command:
+bind:
+    bind -V
+    Ctrl-r:
+    history-search-backward
+alias:
+

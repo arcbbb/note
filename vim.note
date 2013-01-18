@@ -151,3 +151,17 @@ vim today:01/17
 	:mks a.vim
 	vim -S a.vim
     search  #,*, /,? gd,gD
+
+|cmdline.txt|
+    Commandline-editing:
+        enter: <C-J> or <CR>
+        mov:<C-B>/<C-E> to begin/end of cmdline
+	delete:<C-W>
+	paste: <C-R><C-W>: word under the cursor
+	       <C-R><C-A>: WORD under the cursor
+	       <C-R> <C-F>/<C-P>: Filename/Path under the cursor, like |gf|
+	       <C-R><C-R>{regname}: paste literally.
+	completion: |cmdline-completion|
+	       <C-D>: list names that match the pattern
+	       <C-I>or<wildchar>: insert the first match
+	       <C-A>: insert all names that match the pattern

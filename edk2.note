@@ -1,3 +1,12 @@
+code organization:
+1. grep "extern"
+   should be move to .h header file
+   no global guid instance, should be in AutoGen.c
+2. examine guid
+   every consumed sct guid should be checked
+
+#####################################################
+
 1. write INF
    determine include header in Autogen.h
    firmware type in FDF
@@ -113,7 +122,7 @@ ASSERT();
 #### Semantic Change
 ConvertTextToDevicePath    ->  EfiDevicePathFromTextProtocol->ConvertTextToDevicePath (DevicePathStr);
                                when to AppendDevicePathInstance() ?
-GetNextGuidHob
+GetNextGuidHob             ->  GetNextGuidHob
 
 
 #### Syntax Change
@@ -173,21 +182,21 @@ Service Changed:
 	
 Library Changed:
 
-    EfiLibAllocateZeroPool   -> AllocateZeroPool #include <Library/MemoryAllocationLib.h>
-    EfiLibAllocatePool       -> AllocatePool     #include <Library/MemoryAllocationLib.h>
+    EfiLibAllocateZeroPool     -> AllocateZeroPool #include <Library/MemoryAllocationLib.h>
+    EfiLibAllocatePool         -> AllocatePool     #include <Library/MemoryAllocationLib.h>
     EfiCopyMem, EfiCommonLibCopyMem  -> CopyMem          #include <Library/BaseMemoryLib.h> MdePkg
-    EfiZeroMem               -> ZeroMem
-    memcpy                   -> CopyMem //Initializing local variables, such as arrays or structures can
+    EfiZeroMem                 -> ZeroMem
+    memcpy                     -> CopyMem //Initializing local variables, such as arrays or structures can
                                        //sometimes lead to the compiler inserting a memcpy.
-    EfiStrCmp(CHAR16,CHAR16) -> StrCmp           #BaseLib MdePkg
+    EfiStrCmp(CHAR16,CHAR16)   -> StrCmp           #BaseLib MdePkg
 
     EfiLibGetSystemConfigurationTable -> EfiGetSystemConfigurationTable //is it the same?
-    GetPeiServices           -> GetPeiServicesTablePointer  #include <Library/PeiServicesTablePointerLib.h>
+    GetPeiServices             -> GetPeiServicesTablePointer  #include <Library/PeiServicesTablePointerLib.h>
 
-    GetNextGuidHob(x,y,z,w)  -> GetNextGuidHob(x,y)
+    GetNextGuidHob(x,y,z,w)    -> GetNextGuidHob(x,y)
 
     HexStringToBuf(UINT8,CHAR16) -> UnicodeStrToAsciiStr(CHAR16,CHAR8) #BaseLib MdePkg
-    sprintf, SPrint          -> UnicodeSPrint, AsciiSPrint  #Library/PrintLib.h MdePkg
+    sprintf, SPrint            -> UnicodeSPrint, AsciiSPrint  #Library/PrintLib.h MdePkg
 Hii
     IsConfigHdrMatch                    -> HiiIsConfigHdrMatch  #IfrSupport -> HiiLib.h MdeModulePkg
     IfrLibSetString(1,2,3)              -> HiiSetString (1,2,3,NULL);
@@ -207,6 +216,7 @@ VfrCompile
 SMM
     EfiInitializeSmmDriverLib    -> dont trigger into SMM 
 
+Dxe library
 AcpiLibDuplicateResources
 AcpiLibAppendIoPortResource
 asctime_r

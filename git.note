@@ -116,3 +116,9 @@ Git Protocol: fastest, read-only
 $ git clone git://github.com/arcbbb/note.git
 File
 reference:https://github.com/schacon/git-presentations
+
+#### Gitk install
+1. cygwin: "xinit" and "X-start-menu-icons"
+2. .bashrc: export DISPLAY=:0.0.
+3. touch ~/.startxwinrc
+$. git gui, gitk

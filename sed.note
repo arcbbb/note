@@ -5,3 +5,19 @@ Execution Cycle:
 Pattern space: delete between cycles
 Hold space: keeps data between cycles
      move data between both buffers: `h', `H', `x', `g', `G' 
+
+{addressing}{cmd};...;
+
+command:
+normal cmd:
+    r,w
+    c:delete & insert
+    D:delete
+space cmd
+    h: pattern space  >  hold space
+    H: pattern space  >> hold space
+    g: pattern space  <  hold space
+    G: pattern space <<  hold space
+    x: pattern space <-> hold space
+
+    3h4g
