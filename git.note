@@ -149,10 +149,16 @@ Creating a tree: filename & blob SHA-1
 	    $ git update-index --add <filename>
 	    or    update-index --add --cacheinfo <mode> <SHA-1> <filename>
 	    $ git write-tree
+
 	    mode = 100644, 100755, 120000
-    2. add tree to staging area
+	    e.g. create tree dir and blob abc.
+	    $ git update-index --add dir/abc
+	    $ git write-tree
+	    
+    add existing tree to staging area
 	    $ git read-tree --prefix=<dirname> <SHA-1>
 	    $ git write-tree
+git ls-files
 Creating a commit: 
     $ git commit-tree <tree SHA-1>
     initial  commit:   no parent
@@ -191,3 +197,24 @@ $ git log
     --until, --before
     --author, --committer
     -- <path>
+$ git diff
+	1. Diff working tree with index(staged area), commit
+	   git diff          --
+	   git diff [commit] --
+
+	   e.g. git diff   HEAD   --
+
+	2. Diff staging area with commit
+	   git diff --cached [commit] --
+
+	   e.g. git diff --cached   HEAD   --
+
+	3. Diff two commit 
+	   git diff [commit] [commit] --
+	   git diff [commit]..[commit] --
+
+	4. Diff two branch
+	   git diff [commit]...[commit] --
+
+	   equals git diff $(git-merge-base A B) B
+
