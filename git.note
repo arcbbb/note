@@ -122,3 +122,72 @@ reference:https://github.com/schacon/git-presentations
 2. .bashrc: export DISPLAY=:0.0.
 3. touch ~/.startxwinrc
 $. git gui, gitk
+
+#### Git Pro: ch9 Git Internals
+FILE config: Project-specific configuration options.
+DIR  info: global ignore file
+DIR  hooks: hook shell scripts, ch6
+### CORE ###
+DIR  objects: all the content of the Database.
+DIR  refs: <SHA-1> of the last commit for each branch.
+FILE HEAD: points to the branch currently checked out.
+FILE index: stores staging area information.
+
+
+Examine git object
+    $ git cat-file 
+    $ git cat-file -p master^{tree}
+Creating a blob: just the content
+    $ git hash-object 
+    filename(40byte) = SHA-1 hash(header+file content)
+    content    = Zlib (file content)
+
+    $ echo 'test content' | git hash-object -w --stdin
+	$ git cat-file -p <SHA-1>
+Creating a tree: filename & blob SHA-1
+    1. add blob to staging area
+	    $ git update-index --add <filename>
+	    or    update-index --add --cacheinfo <mode> <SHA-1> <filename>
+	    $ git write-tree
+	    mode = 100644, 100755, 120000
+    2. add tree to staging area
+	    $ git read-tree --prefix=<dirname> <SHA-1>
+	    $ git write-tree
+Creating a commit: 
+    $ git commit-tree <tree SHA-1>
+    initial  commit:   no parent
+    ordinary commit:  one parent
+    merge    commit: more parent
+
+
+	git add:  add to staging area, write out tree
+	git commit: 
+Creating a reference:
+    $ echo <SHA-1> > .git/refs/heads/master
+    or $ git update-ref refs/heads/master <SHA-1>
+Creating a branch test:
+    $ git update-ref refs/heads/test <SHA-1>
+.git/HEAD:
+    1. read
+    $ git symbolic-ref HEAD 
+    2. set
+    $ git symbolic-ref HEAD refs/heads/test
+
+$ git log
+    -p: show the patch with each commit
+    --stat: show statistics
+    --shortstat: display only changed/insert/delete line
+    --name-only: list of modified files
+    --name-status: name + status
+    --abbrev-commit: abbrev SHA-1 checksum
+    --graph:
+    --pretty: oneline, short, full, fuller, format:
+	format:"%h - %an, %ar : %s"
+		%h: abbrev Hash
+		%an: author name, who write the patch
+		%ar: author relative date
+		%cn: committer name, who apply the patch
+    --since, --after
+    --until, --before
+    --author, --committer
+    -- <path>
