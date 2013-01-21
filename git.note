@@ -169,8 +169,8 @@ Creating a commit:
 	git add:  add to staging area, write out tree
 	git commit: 
 Creating a reference:
-    $ echo <SHA-1> > .git/refs/heads/master
-    or $ git update-ref refs/heads/master <SHA-1>
+    manually: $ echo <SHA-1> > .git/refs/heads/master
+    command:  $ git update-ref refs/heads/master <SHA-1>
 Creating a branch test:
     $ git update-ref refs/heads/test <SHA-1>
 .git/HEAD:
@@ -218,3 +218,52 @@ $ git diff
 
 	   equals git diff $(git-merge-base A B) B
 
+#### submodule
+	   $ git submodule add <repository> .
+	   it add .gitmodule in DIR
+	   $ git clone <repository>
+	   $ git submodule init
+	   $ git submodule update
+	   $ git merge origin/master
+	   $ git submodule update
+#### subtree merge
+	   // setup subtree
+	   $ git remote add <r-name> <repository>
+	   $ git fetch <r-name>
+	   $ git checkout -b <b-name> <r-name/branch>
+	   $ git read-tree --prefix=<d-name> -u <b-name>
+
+	   // pull method
+	   $ git checkout <b-name>
+	   $ git pull
+	   $ git checkout master
+	   $ git merge --squash -s subtree --no-commit <b-name>
+
+	   // push method
+	   $ git checkout <b-name>
+	   $ git merge --squash -s subtree --no-commit master
+
+	   // diff method: diff dir & branch
+	   $ git diff-tree -p <b-name>
+	   or git diff-tree -p <r-name/branch>
+
+	   //key: add branch as directory
+	   $ git read-tree --prefix=cork2/ -u cork/master:modules
+
+	   //list
+	   $ git ls-tree
+	   List the contents of a tree object
+	   $ git ls-file
+	   Show information about files in the index and the working tree
+	   $ git cat-file <commit>^{tree}
+#### checkout specify branch
+$ git remote add -t IpmiOnly -f ipmi ~/rc70227u
+#### specify refspec on command line  +<src>:<dst>
+$ git fetch origin master:refs/remotes/origin/master
+#### create branch
+$ git fetch origin IpmiOnly:refs/heads/tmp
+
+## Add remote
+$ git remote add <name> <repo>
+## just fetch
+$ git fetch <name>
