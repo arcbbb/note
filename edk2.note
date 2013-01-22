@@ -6,6 +6,17 @@ code organization:
    every consumed sct guid should be checked
 
 #####################################################
+library not found
+edk1: .inf:lib,  global lib directory
+edk2: .inf:lib, .dsc:lib|path
+
+header not found
+edk2: .inf:[Packages], .dec:[Include]
+
+how to build module
+edk1: add inf to module/Build/{Library|Pei|Dxe}.dsc
+edk2: add component to Build{Library|Pei|Dxe}.def
+#####################################################
 
 1. write INF
    determine include header in Autogen.h
