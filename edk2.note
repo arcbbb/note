@@ -176,6 +176,8 @@ Guid C name changed:
     gEfiRscHandlerPpiGuid       -> gEfiPeiRscHandlerPpiGuid
     gPeiReadOnlyVariablePpiGuid -> gEfiPeiReadOnlyVariable2PpiGuid
     gPeiStallPpiGuid            -> gEfiPeiStallPpiGuid
+    EFI_SMM_BASE_PROTOCOL_GUID  -> EFI_SMM_BASE2_PROTOCOL_GUID
+    EFI_SMM_CONTROL_PROTOCOL_GUID->EFI_SMM_CONTROL2_PROTOCOL_GUID
 
 TYPE Changed:
     EFI_RSC_HANDLER_PPI        -> EFI_PEI_RSC_HANDLER_PPI
@@ -208,6 +210,8 @@ Library Changed:
 
     HexStringToBuf(UINT8,CHAR16) -> UnicodeStrToAsciiStr(CHAR16,CHAR8) #BaseLib MdePkg
     sprintf, SPrint            -> UnicodeSPrint, AsciiSPrint  #Library/PrintLib.h MdePkg
+    strlen                     -> AsciiStrLen
+    
 Hii
     IsConfigHdrMatch                    -> HiiIsConfigHdrMatch  #IfrSupport -> HiiLib.h MdeModulePkg
     IfrLibSetString(1,2,3)              -> HiiSetString (1,2,3,NULL);

@@ -84,8 +84,14 @@ vim today:01/14
 		 excute Normal mode: <C-o>
     [usr_03.txt] move around 
     line: 0,^,$: first char, first non-blank
-    line number: G
+           center of screen: gm
+           fF,tT: ,/;, gm
+	   line number:30, character 20
+	   addressing: 30G, 20|
+
     screen: 50%, H,M,L
+    block: {/},
+    function: [[,]]
     page: <C-e>/<C-y>, <C-d>/<C-u>
     word: w,b: e,ge, start/end of word
     char: fx,tx  :find/to
@@ -188,3 +194,13 @@ vim today:01/17
     Key Mapping:map
     Command-line commands:command
     autocmd
+
+
+case: ~,gu/gU
+	|zf|	zf	define a fold
+	|g@|    g@      call function set with the 'operatorfunc' option
+        |gq|	gq	text formatting                
+y+f;yfe
+left-right motion: h/l,^/$,0/g_, gm,|(bar)
+            fast: f/F,t/T,  (;,)
+up-down motion:j/k

@@ -82,6 +82,7 @@ Commit/Snapshot
     HEAD...HEAD^ : exclude common, show both diff
 $ git diff
 	--find-copies-harder
+	--diff-filter=M
 	detect renamed or copied files
 	1. Diff working tree with index(staged area), commit
 	   git diff          --
@@ -191,7 +192,9 @@ $ git log
 #### repository operation: basic
 	1. init:  git init
 	2. set remote: git remote add <name> <repo>
-	3. sync: git fetch <r_name>/<branch>
+	3. sync database: fetch & push
+		git fetch <remote>
+                git fetch <r_name>/<branch>
 	*. combination: add & fetch
 	$ git remote add -t IpmiOnly -f ipmi ~/rc70227u
 
