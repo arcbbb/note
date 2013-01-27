@@ -4,6 +4,10 @@
 3. touch ~/.startxwinrc
 $. git gui, gitk
 ########### Reference
+n. A successful git branching model
+http://nvie.com/posts/a-successful-git-branching-model/
+n. Git cheatsheet
+https://gitcafe.com/riku/GitTips/raw/master/Images/Git_Command_List.png
 ################# Git gittutorial
 ################# Git gitworkflows
 1. http://ihower.tw/git/files/ihower-git.pdf
@@ -116,6 +120,7 @@ DIR  objects: all the content of the Database.
 DIR  refs: <SHA-1> of the last commit for each branch.
 FILE HEAD: points to the branch currently checked out.
 FILE index: stores staging area information.
+DIR  logs: git log/reflog 
 
 
 Examine git object
@@ -215,7 +220,6 @@ $ git log
 #### bisect
 	start,bad,good,log,replay,reset
 
-##################  Advance operation #############
 #### subtree
 	   1. fetch another <repo>
 	   $ git remote add <r-name> <repository>
@@ -246,3 +250,69 @@ $ git log
 	   $ git submodule update
 	   $ git merge origin/master
 	   $ git submodule update
+#### push
+	   push
+	   	default remot -> config: [branch] remote
+#### stash: while in between commits
+	1. clean Work directory
+	$ git stash
+	or $ git stash save "msg"
+	--keep-index: do not reset INDEX
+	2. restore
+	$ git stash apply
+	or $ git stash apply stash@2
+	3. see which stashse
+	$ git stash list
+	4. remove stash
+	$ git stash drop stash@{2}
+	5. apply then drop
+	$ git stash pop
+	6. create a branch and switch to, then apply stash and drop.
+	$ git stash branch <name> <stash>
+#### grep
+	only grep tracked files,
+	grep for only C source files
+	git grep -e ';;' -- '*.c' 
+	git grep -e ';;' --and --not -e 'xxx' = grep -e ';;'|grep -v 'xx'
+
+#### fsck
+	$ git fsck --unreachable
+#### reflog/log
+	$ git reflog
+	or $ git reflog show HEAD
+	or $ git log -g --abbrev-commit --pretty=oneline
+#### reset
+	1. reset INDEX
+	$ git reset <path>  opposite to -> $ git add <path>
+	$ git reset -p      opposite to -> $ git add -p 
+	
+	$ git reset --soft  HEAD^     // reset HEAD of branch
+	                              // copy current to ORIG_HEAD
+	$ git reset --mixed HEAD^     // reset INDEX also.
+	$ git reset --hard  HEAD^     // reset all modification
+	advanced:
+	keep changes while discarding some commits
+	$ git reset --keep
+	pull failed
+	$ git reset --merge
+#### merge
+	no fast forward, default fast-forward(-ff)
+	$ git --no-ff
+	config
+	$ git merge.conflictstyle diff3
+	when conflict
+	$ git diff
+	$ git show :1:<file>
+	diff HEAD MERGE_HEAD
+	$ git log --merge  -p <dir>
+	abort
+	$ git merge --abort == git reset --merge
+	solve conflict
+	$ git add and $git commit
+
+	$ git ls-files -u
+	stage 1: Common Ancesstor
+	stage 2: HEAD
+	stage 3: MERGE_HEAD
+#### rebase
+	$ rebase -i
