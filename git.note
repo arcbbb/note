@@ -1,22 +1,36 @@
-Git User's Manual
+#### Gitk install
+1. cygwin: "xinit" and "X-start-menu-icons"
+2. .bashrc: export DISPLAY=:0.0.
+3. touch ~/.startxwinrc
+$. git gui, gitk
+########### Reference
+n. A successful git branching model
+http://nvie.com/posts/a-successful-git-branching-model/
+n. Git cheatsheet
+https://gitcafe.com/riku/GitTips/raw/master/Images/Git_Command_List.png
+################# Git gittutorial
+################# Git gitworkflows
+1. http://ihower.tw/git/files/ihower-git.pdf
+	Git Clone
+	SSH: $ git clone git@github.com:arcbbb/note.git
+	HTTP/HTTPS  $ git clone https://arcbbb@github.com/arcbbb/note.git
+	Git Protocol: fastest, read-only
+	$ git clone git://github.com/arcbbb/note.git
+	File
+	reference:https://github.com/schacon/git-presentations
+2. Git Hub
+	$ git clone https://github.com/arcbbb/note.git
+	git remote rm github_note
+	git remote add github_note https://github.com/arcbbb/note.git
+	git remote set-url github_note https://arcbbb@github.com/arcbbb/note.git
+	git push github_note master
+3. Git User's Manual
 http://www.kernel.org/pub/software/scm/git/docs/v1.7.3/user-manual.html#resolving-a-merge
 
-http://www.landley.net/writing/git-bisect-howto.html
+4. http://www.landley.net/writing/git-bisect-howto.html
+#### Problem
 $ git svn clone https://edk2.svn.sourceforge.net/svnroot/edk2/trunk/edk2
 $ GIT_TRACE=1 git svn fetch
-#### FILE STATUS
-
-untracked <----> tracked
-$ git add/rm
-
-modified file ----> staged file
-$ git add
-
-$ git status
-modified, staged
-
-unstaged(git diff) --> staged(git status) --> commit
-crafting commit
 
 ##### LOG
 $ git log -p -2
@@ -39,21 +53,11 @@ Unmodified <--1 Modified <--2 Staged <--3 Commit
 		$ git commit
 		$ git add ... // fix last commit
 		$ git commit --amend
-#### BRANCH
-	HEAD: tell what branch is currently on.
-	HEAD: points to 'master'
-	1. Branch Create
-		$ git branch <branchname>
-	2. Branch Delete
-		$ git branch -d <branchname>
-	3. Branch Switch
-		$ git checkout <branchname>
-		HEAD: points to 'branchname'
-#Note1: 'git stash' uncommited changes before branch switch
-#Note2: or 'git commit -a', then 'git reset' undo this commit
-	4. Branch Create & Switch: -b
-		$ git checkout -b <branchname>
-		HEAD: points to 'branchname'
+
+	4. CLEAN working directory
+		$ git checkout -f
+		$ git clean -d
+
 #### MERGE
 #Note: Commit Object
 	1. Merge Commit
@@ -69,12 +73,6 @@ Unmodified <--1 Modified <--2 Staged <--3 Commit
 	rewrite a large number of commits
 	$ git filter-branch
 
-################# Git Hub
-	$ git clone https://github.com/arcbbb/note.git
-	git remote rm github_note
-	git remote add github_note https://github.com/arcbbb/note.git
-	git remote set-url github_note https://arcbbb@github.com/arcbbb/note.git
-	git push github_note master
 ################# Concept
 File, Commit/Snapshot, Branch, Repository
 
@@ -86,39 +84,235 @@ Commit/Snapshot
     HEAD^1, HEAD^2 // for merge commit:    parent 1&2
     HEAD..HEAD^  : exclude HEAD, show HEAD^ diff
     HEAD...HEAD^ : exclude common, show both diff
+$ git diff
+	--find-copies-harder
+	--diff-filter=M
+	detect renamed or copied files
+	1. Diff working tree with index(staged area), commit
+	   git diff          --
+	   git diff [commit] --
 
-Branch: trace of commit
-################# Git gittutorial
+	   e.g. git diff   HEAD   --
 
-pull = fetch & merge
+	2. Diff staging area with commit
+	   git diff --cached [commit] --
 
-Repository operation: 
-    git clone <dir> <branch>
-    git remote <r_name> <dir>
-branch operation:
-    git  pull <dir> <branch>
-        $ git pull
-        // pull from where it clone, look at config remote.origin.url
+	   e.g. git diff --cached   HEAD   --
 
-    git fetch <dir> <branch>
-        $ git fetch <r_name>/<branch>
-	$ git log -p HEAD..FETCH_HEAD
+	3. Diff two commit 
+	   git diff [commit] [commit] --
+	   git diff [commit]..[commit] --
 
-name: branch, commit(SHA-1), file, HEAD(commit)
+	4. Diff two branch
+	   git diff [commit]...[commit] --
 
-################# Git gitworkflows
+	   equals git diff $(git-merge-base A B) B
 
-##### http://ihower.tw/git/files/ihower-git.pdf
-Git Clone
-SSH: $ git clone git@github.com:arcbbb/note.git
-HTTP/HTTPS  $ git clone https://arcbbb@github.com/arcbbb/note.git
-Git Protocol: fastest, read-only
-$ git clone git://github.com/arcbbb/note.git
-File
-reference:https://github.com/schacon/git-presentations
 
-#### Gitk install
-1. cygwin: "xinit" and "X-start-menu-icons"
-2. .bashrc: export DISPLAY=:0.0.
-3. touch ~/.startxwinrc
-$. git gui, gitk
+
+
+#### Git Pro: ch9 Git Internals
+FILE config: Project-specific configuration options.
+DIR  info: global ignore file
+DIR  hooks: hook shell scripts, ch6
+### CORE ###
+DIR  objects: all the content of the Database.
+DIR  refs: <SHA-1> of the last commit for each branch.
+FILE HEAD: points to the branch currently checked out.
+FILE index: stores staging area information.
+DIR  logs: git log/reflog 
+
+
+Examine git object
+    $ git cat-file 
+    $ git cat-file -p master^{tree}
+Creating a blob: just the content
+    $ git hash-object 
+    filename(40byte) = SHA-1 hash(header+file content)
+    content    = Zlib (file content)
+
+    $ echo 'test content' | git hash-object -w --stdin
+	$ git cat-file -p <SHA-1>
+Creating a tree: filename & blob SHA-1
+    1. add blob to staging area
+	    $ git update-index --add <filename>
+	    or    update-index --add --cacheinfo <mode> <SHA-1> <filename>
+	    $ git write-tree
+
+	    mode = 100644, 100755, 120000
+	    e.g. create tree dir and blob abc.
+	    $ git update-index --add dir/abc
+	    $ git write-tree
+	    
+    add existing tree to staging area
+	    $ git read-tree --prefix=<dirname> <SHA-1>
+	    $ git write-tree
+Creating a commit: 
+    $ git commit-tree <tree SHA-1>
+    initial  commit:   no parent
+    ordinary commit:  one parent
+    merge    commit: more parent
+
+
+	git add:  add to staging area, write out tree
+	git commit: 
+Creating a reference:
+    manually: $ echo <SHA-1> > .git/refs/heads/master
+    command:  $ git update-ref refs/heads/master <SHA-1>
+Creating a branch test:
+    $ git update-ref refs/heads/test <SHA-1>
+.git/HEAD:
+    1. read
+    $ git symbolic-ref HEAD 
+    2. set
+    $ git symbolic-ref HEAD refs/heads/test
+
+$ git log
+    -p: show the patch with each commit
+    --stat: show statistics
+    --shortstat: display only changed/insert/delete line
+    --name-only: list of modified files
+    --name-status: name + status
+    --abbrev-commit: abbrev SHA-1 checksum
+    --graph:
+    --pretty: oneline, short, full, fuller, format:
+	format:"%h - %an, %ar : %s"
+		%h: abbrev Hash
+		%an: author name, who write the patch
+		%ar: author relative date
+		%cn: committer name, who apply the patch
+    --since, --after
+    --until, --before
+    --author, --committer
+    -- <path>
+
+#### git internal operation
+	1. List the contents of a tree object
+	$ git ls-tree
+	2. Show information about files in the index and the working tree
+	$ git ls-file
+	3. list commit root dir
+	$ git cat-file <commit>^{tree}
+
+#### repository operation: basic
+	1. init:  git init
+	2. set remote: git remote add <name> <repo>
+	3. sync database: fetch & push
+		git fetch <remote>
+                git fetch <r_name>/<branch>
+	*. combination: add & fetch
+	$ git remote add -t IpmiOnly -f ipmi ~/rc70227u
+
+	*. direct fetch. refspec +<src>:<dst>
+	$ git fetch <remote> <r-branch>:<local>
+	$ git fetch origin master:refs/remotes/origin/master
+#### repository operation: composite
+	1. clone: git clone <dir> <branch>
+	2. pull: fetch&merge
+	$ git  pull <dir> <branch>
+
+#### output
+	$ mkdir $COPY
+	$ git archive master | tar xCv $COPY
+	$ git archive master | bzip2 > master.tar.bz2
+
+
+#### bisect
+	start,bad,good,log,replay,reset
+
+#### subtree
+	   1. fetch another <repo>
+	   $ git remote add <r-name> <repository>
+	   $ git fetch <r-name>
+	   2. set up an branch for <repo>
+	   $ git checkout -b <b-name> <r-name/branch>
+	   3. keypoint1. add tree to index
+	   $ git read-tree --prefix=<d-name> -u <b-name>
+
+	   // pull method
+	   $ git checkout <b-name>
+	   $ git pull
+	   $ git checkout master
+	   $ git merge --squash -s subtree --no-commit <b-name>
+
+	   // push method
+	   $ git checkout <b-name>
+	   $ git merge --squash -s subtree --no-commit master
+
+	   // diff method: diff dir & branch
+	   $ git diff-tree -p <b-name>
+	   or git diff-tree -p <r-name/branch>
+#### submodule
+	   $ git submodule add <repository> .
+	   it add .gitmodule in DIR
+	   $ git clone <repository>
+	   $ git submodule init
+	   $ git submodule update
+	   $ git merge origin/master
+	   $ git submodule update
+#### push
+	   push
+	   	default remot -> config: [branch] remote
+#### stash: while in between commits
+	1. clean Work directory
+	$ git stash
+	or $ git stash save "msg"
+	--keep-index: do not reset INDEX
+	2. restore
+	$ git stash apply
+	or $ git stash apply stash@2
+	3. see which stashse
+	$ git stash list
+	4. remove stash
+	$ git stash drop stash@{2}
+	5. apply then drop
+	$ git stash pop
+	6. create a branch and switch to, then apply stash and drop.
+	$ git stash branch <name> <stash>
+#### grep
+	only grep tracked files,
+	grep for only C source files
+	git grep -e ';;' -- '*.c' 
+	git grep -e ';;' --and --not -e 'xxx' = grep -e ';;'|grep -v 'xx'
+
+#### fsck
+	$ git fsck --unreachable
+#### reflog/log
+	$ git reflog
+	or $ git reflog show HEAD
+	or $ git log -g --abbrev-commit --pretty=oneline
+#### reset
+	1. reset INDEX
+	$ git reset <path>  opposite to -> $ git add <path>
+	$ git reset -p      opposite to -> $ git add -p 
+	
+	$ git reset --soft  HEAD^     // reset HEAD of branch
+	                              // copy current to ORIG_HEAD
+	$ git reset --mixed HEAD^     // reset INDEX also.
+	$ git reset --hard  HEAD^     // reset all modification
+	advanced:
+	keep changes while discarding some commits
+	$ git reset --keep
+	pull failed
+	$ git reset --merge
+#### merge
+	no fast forward, default fast-forward(-ff)
+	$ git --no-ff
+	config
+	$ git merge.conflictstyle diff3
+	when conflict
+	$ git diff
+	$ git show :1:<file>
+	diff HEAD MERGE_HEAD
+	$ git log --merge  -p <dir>
+	abort
+	$ git merge --abort == git reset --merge
+	solve conflict
+	$ git add and $git commit
+
+	$ git ls-files -u
+	stage 1: Common Ancesstor
+	stage 2: HEAD
+	stage 3: MERGE_HEAD
+#### rebase
+	$ rebase -i

@@ -84,8 +84,14 @@ vim today:01/14
 		 excute Normal mode: <C-o>
     [usr_03.txt] move around 
     line: 0,^,$: first char, first non-blank
-    line number: G
+           center of screen: gm
+           fF,tT: ,/;, gm
+	   line number:30, character 20
+	   addressing: 30G, 20|
+
     screen: 50%, H,M,L
+    block: {/},
+    function: [[,]]
     page: <C-e>/<C-y>, <C-d>/<C-u>
     word: w,b: e,ge, start/end of word
     char: fx,tx  :find/to
@@ -150,13 +156,24 @@ vim today:01/17
     session
 	:mks a.vim
 	vim -S a.vim
-    search  #,*, /,? gd,gD
+    search
+        pattern: /,?
+	word: *,#  partial-match: g*,g#
+	definition:gd,gD   local/global
+        stop highlight: :noh      //diff :set nohls
+	search-offset: /pattern/offset
+	    +/-[num] : line
+	    e+/-[num]: [num] char to end   of the match
+	    b+/-[num]: [num] char to start of the match
+	    ;{pattern}: perform another search
+
+
 
 |cmdline.txt|
     Commandline-editing:
         enter: <C-J> or <CR>
         mov:<C-B>/<C-E> to begin/end of cmdline
-	delete:<C-W>
+	delete:<C-W>,<C-H>
 	paste: <C-R><C-W>: word under the cursor
 	       <C-R><C-A>: WORD under the cursor
 	       <C-R> <C-F>/<C-P>: Filename/Path under the cursor, like |gf|
@@ -165,3 +182,25 @@ vim today:01/17
 	       <C-D>: list names that match the pattern
 	       <C-I>or<wildchar>: insert the first match
 	       <C-A>: insert all names that match the pattern
+
+|scroll.txt|
+	Scrolling: 
+		Extra lines/Y
+		Downward/Upward
+		Forward/Backward
+	scrolling relative to cursor: zz,zb,zt
+
+|usr_40.txt| create new commands
+    Key Mapping:map
+    Command-line commands:command
+    autocmd
+
+
+case: ~,gu/gU
+	|zf|	zf	define a fold
+	|g@|    g@      call function set with the 'operatorfunc' option
+        |gq|	gq	text formatting                
+y+f;yfe
+left-right motion: h/l,^/$,0/g_, gm,|(bar)
+            fast: f/F,t/T,  (;,)
+up-down motion:j/k
