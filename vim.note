@@ -204,3 +204,27 @@ y+f;yfe
 left-right motion: h/l,^/$,0/g_, gm,|(bar)
             fast: f/F,t/T,  (;,)
 up-down motion:j/k
+vim today: 01/30
+|usr_29.txt| Moving through programs
+    :set tags=./tags,./*/tags
+    jump to tag: :tag, C-], C-W + ]
+    multiple tags:  :tnext, :tselect <tagname>
+    search tag:  :tag /<name>
+    preview windows: :ptag <name>, C-W + }
+        :pedit, :pclose, :psearch
+    moving through program:
+        #if, #endif: [#, ]#
+    outer block: '{' '}' in the first column
+    1. mov between outer block:
+    prev:
+    start'{': [[
+    end'}' : []
+
+    next:
+    start'{': ]]
+    end'}': ][
+    2. mov between inner block : [m, ]m
+
+    3. current outer block: : [{, ]}, {, }
+    braces:[(,])
+    comment[/,]/

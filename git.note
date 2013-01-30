@@ -243,13 +243,17 @@ $ git log
 	   $ git diff-tree -p <b-name>
 	   or git diff-tree -p <r-name/branch>
 #### submodule
+	   1. in git repo top directory
 	   $ git submodule add <repository> .
-	   it add .gitmodule in DIR
-	   $ git clone <repository>
+	   it will add .gitmodule in repo top directory
+	   2. clone a repo with submodule, manually type following
 	   $ git submodule init
 	   $ git submodule update
-	   $ git merge origin/master
+	   or $ git submodule update --init <subm name>
+	   3. when it comes to merge,
 	   $ git submodule update
+	   $ git merge origin/master
+	   $ git submodule update    / strange, right?
 #### push
 	   push
 	   	default remot -> config: [branch] remote
@@ -295,11 +299,13 @@ $ git log
 	$ git reset --keep
 	pull failed
 	$ git reset --merge
+	undo a commit other than the latest
+	$ git revert
 #### merge
 	no fast forward, default fast-forward(-ff)
 	$ git --no-ff
 	config
-	$ git merge.conflictstyle diff3
+	$ git config merge.conflictstyle diff3
 	when conflict
 	$ git diff
 	$ git show :1:<file>
@@ -316,3 +322,7 @@ $ git log
 	stage 3: MERGE_HEAD
 #### rebase
 	$ rebase -i
+#### config
+	$ git config merge.conflictstyle diff3
+	// for pull to --rebase by default
+	$ git config branch.master.rebase true
