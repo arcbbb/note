@@ -1,0 +1,23 @@
+edk2:
+build OvmPkg
+
+1. apt-get install iasl
+2. apt-get install uuid-dev
+3. make -C /home/arcb/share/git/edk2/BaseTools/Source/C
+4. modify Conf/tool-def.txt, Conf/target.txt
+    remove melf x86_64
+5. . edksetup.sh
+6. build
+
+qemu:
+1. apt-get install zlib1g-dev
+2. apt-get install libglib2.0-dev
+3. apt-get install libtool
+4. apt-get install autoconf
+5. ./configure --target-list=x86_64-softmmu
+
+run:
+cp OVMF.fd bios.bin
+cp OvmfVideo.rom vgabios-cirrus.bin
+mkdir hda
+qemu-system-x86_64 -L . -hda fat:hda -nographic

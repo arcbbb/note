@@ -1,0 +1,17 @@
+## Getting Started
+http://llvm.org/docs/GettingStarted.html
+git
+% git clone http://llvm.org/git/llvm.git
+% cd llvm/tools
+% git clone http://llvm.org/git/clang.git
+
+clang -emit-llvm
+-S: .ll
+-c: .bc
+-o: .bc
+llvm-as -> llvm-link
+lli: .bc -> lli -> run
+opt: .bc -> opt -> .bc
+llc: .bc -> llc -> .s or .c (-march=c)
+
+llvm-dis, llvm-ar, bugpoint
