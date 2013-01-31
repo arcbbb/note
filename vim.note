@@ -228,3 +228,32 @@ vim today: 01/30
     3. current outer block: : [{, ]}, {, }
     braces:[(,])
     comment[/,]/
+|usr_25.txt| format
+    insert line break automatically
+
+    breaking line: :set textwidth=30
+
+    display lines with a line break: 'wrap'
+
+    reformat: gq  |auto-format|
+        gqap   "ap" -> a-paragraph
+	gggqG
+    |fo-table|, |formatprg|
+
+    alignment
+    :{range}center |width|
+    :{range}right
+    :{range}left [margin]
+
+    justifying  _j, gf, :%!fmt
+
+    Indents and tabs
+    :set autoindent  get the same indent as previous line
+    increasing indent >
+    :set shiftwidth=4    insert four spaces
+    tabstop   tabstop should always 8
+    :set softtabstop=4	  
+    use spaces instead of tab, expandtab
+    wrong tab recovery:  :set tabstop=3, :retab 8
+
+
