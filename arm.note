@@ -1,4 +1,6 @@
 
+
+Architecture:Processor Family: 
 ARMv3:  ARM6,ARM7
 ARMv4T: ARM7TDMI
 ARMv5TEJ:ARM7EJ
@@ -8,3 +10,4 @@ ARMv6-M: Cortex-M0, Cortex-M1
 ARMv7-A:
 ARMv7-R:
 ARMv7-M:
+ARMv7s: Apple Swift

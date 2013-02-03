@@ -1,0 +1,79 @@
+BIOS -> Bootloader -> 3-stage -> kernel -> init (+disk check) -> rc
+
+FreeBSD CH13 The FreeBSD Booting process
+
+1. bootstrap system
+BIOS -> Bootloader at MBR
+	bios POST INT 0x19, copy first sector 512 bytes to 0x7c00
+	Boot0: Standard FreeBSD Boot Manager
+	Grub,Lilo
+	MBR install by fdisk(8), based on /boot/mbr
+
+#Stage 0 /boot/boot0  446bytes
+
+	F1 DOS
+	F2 FreeBSD
+	F3 Linux
+	F4 ??
+	F5 Drive 1
+
+	Default: F2
+
+Install Boot0 boot0cfg(8)
+# fdisk -B -b /boot/boot0 device
+
+Stage 1 and 2   /boot/boot
+	located in the first track of boot slize
+	boot1: knows just enough about the FreeBSD bsdlabel,which stores information about the slice,
+	       to find and execute boot2
+	boot2: understand FreeBSD file system to find file on it, 
+	       provides interface to choose kernel and loader
+	
+	>> FreeBSD/i386 BOOT
+	Default: 0:ad(0,a)/boot/loader
+	boot:
+
+Install boot1 & boot2 bsdlabel(8)
+# bsdlabel -B diskslice
+
+#Stage 3 /boot/loader  loader(8)
+	read /boot/loader.rc   <-- /boot/defaults/loader.conf+/boot/loader.conf
+	read device.hints
+
+# boot -s
+	-a during kernel initialization, ask for the device to mount as the root file system.
+
+	-C boot from CDROM.
+
+	-c run UserConfig, the boot-time kernel configurator
+
+	-s boot into single-user mode
+
+	-v be more verbose during kernel startup
+	more options, read boot(8)
+# unload
+# load kernel.old
+
+
+2. device.hints(5)
+	kenv(1) dump 
+
+boot0 src/usr/src/sys/boot/i386/boot0/boot0.S
+
+boot1 src/usr/src/sys/boot/i386/boot2/boot1.S  .code16
+btx   src/usr/src/sys/boot/i386/btx/btx/btx.S  .code16 .code32
+boot2 src/usr/src/sys/boot/i386/boot2/boot2.c  32bit
+	$ dd if=/dev/zero of=boot2.ldr bs=512 count=1
+	$ btxld -v -E 0x2000 -f bin -b ${BTXKERN} -l boot2.ldr -o boot2.ld -P 1 boot2.bin
+	$ cat boot1 boot2 > boot
+	boot = boot1(0x8c00) + disklabel(0x8e00) + btx (0x9000) + boot2.bin
+	btx - proctected mode
+loader /boot/loader src/usr/src/sys/boot/i386/loader/
+	
+	command_boot
+	amd64_elf -> elf64_exec @src/usr/src/sys/boot/i386/libi386/elf64_freebsd.c
+	elf64_exec -> amd64_tramp -> longmode
+	src/usr/src/sys/boot/i386/libi386/amd64_tramp.S
+	turn on long mode: rdmsr, or, wrrmsr
+kernel /boot/kernel/kernel
+btx client use __args: boot2.c loader 
