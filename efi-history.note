@@ -1,0 +1,57 @@
+Problem: the driver provided by chipset manufacture
+###########   binutils CHANGELOG-2008
+p2008-02-14  Peter Jones  <pjones@redhat.com>
+
+        * efi-rtdrv-ia32.c: New file.
+        * efi-bsdrv-ia32.c: New file.
+        * efi-rtdrv-ia64.c: New file.
+        * efi-bsdrv-ia64.c: New file.
+        * efi-rtdrv-x86_64.c: New file.
+        * efi-bsdrv-x86_64.c: New file.
+        * peicode.h (pe_bfd_object_p): Add support for boot service and
+        runtime service drivers.
+        * libpei.h: Add macros for EFI formats, and rename the efi application
+        format macros to disambiguate.
+        * targets.c: Add bfd_target _vec externs.
+        (_bfd_tar): Add EFI _vec entries.
+        * config.bfd: Add EFI vectors into the selection routines.
+        * configure.in: add EFI _vec entries.
+        * configure: Regenerate.
+        * Makefile.am: Add EFI files.
+        * Makefile.in: Regenerate.
+###########   binutils CHANGELOG-2009
+2009-04-17  H.J. Lu  <hongjiu.lu@intel.com>
+
+        ...
+        * efi-app-ia32.c: Removed.
+        * efi-app-x86_64.c: Likewise.
+        * efi-bsdrv-ia32.c: Likewise.
+        * efi-bsdrv-ia64.c: Likewise.
+        * efi-bsdrv-x86_64.c: Likewise.
+        * efi-rtdrv-ia32.c: Likewise.
+        * efi-rtdrv-ia64.c: Likewise.
+        * efi-rtdrv-x86_64.c: Likewise.
+        * efi-rtdrv-ia32.c: Likewise.
+
+        * efi-app-ia64.c: Moved to ...
+        * pei-ia64.c: This.
+############################################################
+binutils/bfd/peicode.h: generic parts of PE/PEI, for BFD
+binutils/bfd/libpei.h:  generic parts of PE/PEI; common header information
+    cmp: pe vs pei. pe is image without dos header, e.g. DLL.
+    History:
+	UNIX(a.out) -> UNIX System V(coff) -> SVR4 (elf)
+	coff -> pe
+
+2000.12 EFI 1.02
+2002.12 EFI 1.10 by Intel
+2006.01 UEFI 2.0 based on EFI 1.10 by Unified EFI Forumn
+2007.01 UEFI 2.1
+2008.07 UEFI 2.2
+2009.02 UEFI 2.3
+2012.06 UEFI 2.3.1
+
+Disk Layout: MBR vs GPT (Master Boot Record vs Guid Partition Table)
+GPT: UEFI ch5
+Logical Block address = 32bit 64bit
+LBA0: the first logical block
