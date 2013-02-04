@@ -1,0 +1,16 @@
+objcopy -j 
+${OBJCOPY} -j .data -j .dynamic -j .dynstr -j .dynsym -j .hash \
+-j .rel.dyn -j .reloc -j .sdata -j .text -j set_Xcommand_set \
+--target=efi-app-ia32 ${.ALLSRC} ${.TARGET}
+
+-j = --only-section
+.data
+.dynamic
+.dynstr
+.dynsym
+.hash
+.rel.dyn
+.reloc
+.sdata
+.text
+
