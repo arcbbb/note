@@ -326,3 +326,7 @@ $ git log
 	$ git config merge.conflictstyle diff3
 	// for pull to --rebase by default
 	$ git config branch.master.rebase true
+#### fetch
+	fetch remote branch as local branch
+	$ git fetch edk2i AddPchLpcPei:LpcPei
+	no effect .git/config

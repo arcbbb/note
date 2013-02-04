@@ -1,3 +1,46 @@
+load "C:\code\Rose310\Projects\RoseCityCrb\310\DEBUG_VS2008x86\IA32\Udk\001\IpmiPkg\IpmiManagerPei\IpmiManagerPei\DEBUG\IpmiManagerPei.efi" nocode at 0x00ffe803c0
+
+###################   DEBUG
+default:
+DebugLib|MdePkg/Library/BaseDebugLibNull/BaseDebugLibNull.inf
+	DebugPrint -> {}
+
+??:
+DebugLib|IntelFrameworkModulePkg/Library/PeiDxeDebugLibReportStatusCode/PeiDxeDebugLibReportStatusCode.inf
+	DebugPrint -> ReportStatus
+
+DebugLib|MdePkg/Library/BaseDebugLibSerialPort/BaseDebugLibSerialPort.inf
+	DebugPrint -> SerialPortWrite(SerialPortLib)
+
+	MdePkg/Library/BaseSerialPortLibNull/BaseSerialPortLibNull.inf
+	SerialPortWrite -> {}
+
+	PcAtChipsetPkg/Library/SerialIoLib/SerialIoLib.inf
+	SerialPortWrite -> IoWrite8 (gUartBase)
+
+	MdeModulePkg/Library/BaseSerialPortLib16550/BaseSerialPortLib16550.inf
+	16550 UART
+
+	RomleyPlatform:
+	ServerCommonPkg/Library/SerialPortLibUsb/SerialPortLibUsb.inf
+	SerialPortWrite -> UsbDbgOut
+
+	ServerCommonPkg/Library/SerialPortLib/SerialPortLib.inf
+	SerialPortWrite -> IoWrite8 (PcdGet64 (PcdSerialRegisterBase))
+
+
+Uefi driver&App:
+DebugLib|MdePkg/Library/UefiDebugLibConOut/UefiDebugLibConOut.inf
+	DebugPrint -> gST->ConOut->OutputString (gST->ConOut, Buffer);
+DebugLib|MdePkg/Library/UefiDebugLibStdErr/UefiDebugLibStdErr.inf  
+	DebugPrint -> gST->StdErr->OutputString (gST->StdErr, Buffer);
+
+PeCoffExtraActionLib|SourceLevelDebugPkg/Library/PeCoffExtraActionLibDebug/PeCoffExtraActionLibDebug.inf
+
+## INF Updates
++[BuildOptions]
++  MSFT:*_*_*_CC_FLAGS = /Od /Oy-
+################################
 code organization:
 1. grep "extern"
    should be move to .h header file

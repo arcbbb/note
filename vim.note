@@ -107,6 +107,22 @@ vim today:01/15
         |word| letter,digit,underscore
         inner word: when counting
         A word
+	word, sentence, paragraph, section
+	sentence: ending at |.!?| |\n\sp\t|
+	paragraph: begin after empty line '{'
+	section: begin after ^L in the first column 
+	[] block: a[,a]
+	() block: ab,a(,a)
+	<> block: a<,a>
+        {} block: aB,a{,a}
+	tag block: at <tag> </tag>
+	q string: a",a',a`
+     previously yanked or changed: '[,']
+     prev posi before jump: ''
+     last insert mode stop: '^,gi, '.
+
+     jump: <C-o>,<C-i>
+
     delete&cut:    d{object},dd      Shortcuts: dl:x, d$|D,dh:X
     change&insert: c{object},cc      Shortcuts: cl:s, c$|C,cc|S
     join: J,gJ
