@@ -271,5 +271,21 @@ vim today: 01/30
     :set softtabstop=4	  
     use spaces instead of tab, expandtab
     wrong tab recovery:  :set tabstop=3, :retab 8
-
-
+    shift in insert mode: C-t,C-d
+|windows.txt|
+    new window: C-w n
+    close window: C-w q, C-w c
+    split window: C-w s , C-w v
+    only one window: C-w o
+    switch to window: top C-w t, bottom C-w b
+    move window: C-w r, C-w x
+                 C-w J, C-w K, C-w H, C-w L
+    window to tab: C-w T
+    window size: C-w =  balance
+                 C-w <,> [N] 
+		 C-w | [N]
+    open tag,file: C-w ], C-w f
+    open file in tab: C-w gf
+#preview window
+    :pta
+    C-w z
