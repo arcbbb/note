@@ -1,4 +1,85 @@
 viper-mode
+
 vimpulse
 evil
 xkeymacs
+======basic
+buffer displayed on window
+vim - a process -> a screen -> m tabs -> m windows
+emacs - m frames -> m windows
+===Frames : collection of windows
+multiple frames can be shown on screen at the same time
+C-x 5 ~ C-x 4
+close all the frames: C-x C-c  
+
+close cur frame:  C-x 5 0  zero:close
+close all other:  C-x 5 1
+create frame:     C-x 5 2
+                  C-x 5 b BUFNAME
+                  C-x 5 f FILENAME
+switch frame: C-x 5 o    o:other
+===Windows
+C-x o   o:other
+C-x 2   split window
+C-x 3   vertical split
+C-x 4 C-f open another file in window
+C-x 4 b BUFNAME   display buffer in new windows
+C-x 4 b FILENAME  display buffer in new windows
+
+C-x 0   zero:close cur window
+C-x 4 0 close cur window&buffer
+C-x 1   only one window(kill all other window)
+
+C-x ^,},{  taller,wider,narrow
+C-x -,+    shrink, balance
+===Buffers
+========
+C-h k C-f
+
+
+======
+cancel command: C-g
+cursor mov
+	screen: C-v, M-v
+	line: C-n, C-p
+	left right: C-b, C-f, M-b, M-f
+current line: C-l  center,top,bottom
+Ctrl  - char, lines
+Meta  - words, sentences, paragraphs
+
+0,$:    C-a, C-e
+^,$:    M-a, M-e
+hjkl:   C-f, C-b, C-n, C-p
+wb,ege: M-f, M-b
+gg,G:   M-<, M->
+repeat: C-u <num> <cmd>
+zz,zt,zb:  C-l, C-u <n> C-l
+
+#delete
+char,    word: dl: C-d, dw: M-d
+line,sentence: d$: C-k, d): M-k
+#paste: the killed can be yanked
+p: C-y, M-y
+#undo
+u: C-/, C-x u
+
+===File
+C-x C-f open file
+C-x C-s save file
+C-x C-c close file
+C-x s   ask to save each buffer
+===buffer
+C-x C-b       list buffers
+C-x b <name>  switch buffer to <name>
+===X (eXtend) command
+C-x & M-x
+: -> M-x
+ECHO area & Mode line
+Major Mode: Fundamental, 
+      M-x fundamental-mode
+      M-x text-mode
+      C-h m  doc on major mode
+===Search
+C-s, C-r  C-s for next, backspace for previous
+C-g or <CR> would terminate search
+
