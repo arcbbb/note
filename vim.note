@@ -289,3 +289,9 @@ vim today: 01/30
 #preview window
     :pta
     C-w z
+folder
+history
+:undol  undo list
+cscope as tag
+:set cst
+:wundo 
