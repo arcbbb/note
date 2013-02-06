@@ -5,6 +5,8 @@ git
 % cd llvm/tools
 % git clone http://llvm.org/git/clang.git
 
+$ env CFLAGS=-fno-strict-aliasing CXXFLAGS=-fno-strict-aliasing cmake -i ~/share/git/llvm
+
 clang -emit-llvm
 -S: .ll
 -c: .bc
