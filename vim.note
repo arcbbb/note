@@ -271,5 +271,7 @@ vim today: 01/30
     :set softtabstop=4	  
     use spaces instead of tab, expandtab
     wrong tab recovery:  :set tabstop=3, :retab 8
-
+open file under cursor
+gf
+C-w f
 

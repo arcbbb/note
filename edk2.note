@@ -40,6 +40,7 @@ PeCoffExtraActionLib|SourceLevelDebugPkg/Library/PeCoffExtraActionLibDebug/PeCof
 ## INF Updates
 +[BuildOptions]
 +  MSFT:*_*_*_CC_FLAGS = /Od /Oy-
+ C_FLAGS = $(C_FLAGS) /Od /Oy-
 ################################
 code organization:
 1. grep "extern"
