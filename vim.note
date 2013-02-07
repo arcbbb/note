@@ -319,3 +319,24 @@ C-w f
     all open,close: zr,zm, zR,zM  recursive/folds M-ore.
     toggle: zi
     :set foldcolumn=4
+|pi_netrw.txt|
+    browse dir = cur dir: c
+    remove file: <del>, D
+    Rename file: R
+    new file/dir: %,d
+    open file/dir: <CR>,o|v,t (cur win, new win, new tab)
+    preview: p
+    hide dot-files: gh
+    listing: i   thin, long, wide, tree list
+    sorting: s, r
+    Query: qf,qb
+    change dir: u,U
+    Mark:
+        unmark all:mu
+	Delete marked: D
+        directory bookmark: mb,mB,gb
+        file mark: mf, mr
+	target:mt -> copy:mc, move:mm
+        diff:md, edit:me,
+	vimgrep:mg, shell:mx
+
