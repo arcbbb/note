@@ -67,6 +67,21 @@ vim:
       {range}!{filter}    // replace with output
       {range}r !{cmd}  // insert output of command below the cursor
       {range}w !{cmd}
+################## organized
+motion
+	word, sentence, paragraph, section
+	|WORD| non-blank
+	|word| letter,digit,underscore
+	( sentence: ending at |.!?| |\n\sp\t|
+	{ paragraph: begin after empty line '{'
+	[[ section: begin after ^L in the first column, '{' at first
+	[] block: a[,a]
+	() block: ab,a(,a)
+	<> block: a<,a>
+        {} block: aB,a{,a}
+	tag block: at <tag> </tag>
+	q string: a",a',a`
+
 ######################################################################
 vim today:01/14
 [usr_24.txt] insert quickly
@@ -85,7 +100,7 @@ vim today:01/14
     [usr_03.txt] move around 
     line: 0,^,$: first char, first non-blank
            center of screen: gm
-           fF,tT: ,/;, gm
+           fF,tT: ,/;
 	   line number:30, character 20
 	   addressing: 30G, 20|
 
@@ -281,9 +296,9 @@ vim today: 01/30
     move window: C-w r, C-w x
                  C-w J, C-w K, C-w H, C-w L
     window to tab: C-w T
-    window size: C-w =  balance
-                 C-w <,> [N] 
-		 C-w | [N]
+    window size: balance   :  C-w =
+		 set height:  z<N><CR>, C-w _ relative: C-w -,+
+		 set width : C-w |            relative: C-w <,>
     open tag,file: C-w ], C-w f
     open file in tab: C-w gf
 #preview window
@@ -298,3 +313,9 @@ cscope as tag
 open file under cursor
 gf
 C-w f
+|usr_28.txt| folder
+    eazy to reorder: yank,delete
+    Fold,Open,Close: zf,zo,zc
+    all open,close: zr,zm, zR,zM  recursive/folds M-ore.
+    toggle: zi
+    :set foldcolumn=4
