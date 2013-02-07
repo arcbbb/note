@@ -1,0 +1,11 @@
+
+FreeBSD System Programming
+http://khmere.com/freebsd_book/
+FreeBSD handbook
+http://www.freebsd.org/handbook
+
+Freebsd make: .include <name.name>
+System make directory
+/usr/share/mk/ 
+bsd.dep.mk
+bsd.port.mk
