@@ -1,0 +1,20 @@
+apt-get install ftpd     # will install ftpd application under Debian Linux
+apt-get remove ftpd      # will remove ftpd application from Debian Linux system
+dpkg -i ftpd             # install ftpd application under Debian using dpkg
+dpkg -r ftpd             # remove ftpd application under Debian using dpkg
+dpkg -L ftpd             # find files installed by ftpd package under Debian
+dpkg -l | grep ftpd      # find ftpd package from Debian installed packages
+                         # (find if ftpd package is installed or not)
+dpkg -s ftpd             # get info about ftpd package
+dpkg -S /bin/netstat     # find to which package belongs netstat binary
+
+
+
+pkg_add -r apache              # install apache package
+pkg_delete apache-2.2.4_2      # delete apache package
+pkg_info                       # list installed packages
+pkg_info | grep apache         # find if apache package is installed
+pkg_info -L apache-2.2.4_2     # list files installed by apache package (you must use the exact
+		               # name of the package, if your version differs use previous
+		               # command to find exact name of package.
+pkg_info -r apache-2.2.4_2     # will show on which packages depend apache package
