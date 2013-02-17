@@ -29,6 +29,7 @@ http://vim.wikia.com/wiki/Quick_tips_for_using_tab_pages
 
 ######################################################################
 vim:
+  quit:  :q!|ZQ, :wq|ZZ
   Tab
       :set tabline 	
       next/prevous tab: gt,gT

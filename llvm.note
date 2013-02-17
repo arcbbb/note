@@ -15,5 +15,7 @@ llvm-as -> llvm-link
 lli: .bc -> lli -> run
 opt: .bc -> opt -> .bc
 llc: .bc -> llc -> .s or .c (-march=c)
+    $ llc -O2 -mcpu=x86-64 sample.bc -o sample.s
+    $ llc -O2 -march=arm -mcpu=cortex-a9 sample.bc -o sample.s
 
 llvm-dis, llvm-ar, bugpoint

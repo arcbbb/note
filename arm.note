@@ -11,3 +11,5 @@ ARMv7-A:
 ARMv7-R:
 ARMv7-M:
 ARMv7s: Apple Swift
+ARMv8:2 exec state:AArch32,AArch64, 3 instruction-set: A32(ARM),T32,A64
+    Exception Level:0-3, EL0-user,EL1-kernel,EL2-hypvervisor,EL3-TrustZone

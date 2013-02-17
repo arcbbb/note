@@ -1,3 +1,6 @@
+target:
+freebsd,linux,dos
+
 edk2:
 build OvmPkg
 
@@ -10,14 +13,34 @@ build OvmPkg
 6. build
 
 qemu:
+0. git submodule update --init pixman
 1. apt-get install zlib1g-dev
 2. apt-get install libglib2.0-dev
 3. apt-get install libtool
 4. apt-get install autoconf
-5. ./configure --target-list=x86_64-softmmu
+5. ./configure --target-list=x86_64-softmmu --prefix=$HOME/qemubin --static
+6. make & make install
 
 run:
 cp OVMF.fd bios.bin
-cp OvmfVideo.rom vgabios-cirrus.bin
 mkdir hda
-qemu-system-x86_64 -L . -hda fat:hda -nographic
+
+$ ln -sf /home/arcbbb/git/edk2/Build/Ovmf3264/DEBUG_GCC44/FV/OVMF.fd bios.bin
+
+$ qemu-system-x86_64 -hda a.img -monitor stdio -vnc :5900 -boot order=d
+$ gvncviewer :5900
+
+qemu monitor:
+	i,o
+	stop,c
+	gdbserver tcp::1234
+	system_reset, system_powerdown, system_wakeup
+	print $eip
+## create harddisk
+$ dd if=/dev/zero of=file
+$ fdisk file
+mkfs
+## mount partition
+$ mount -o loop,$((start block*512))
+gdisk - manipulate guid partition table
+syslinux -https://wiki.archlinux.org/index.php/Syslinux
