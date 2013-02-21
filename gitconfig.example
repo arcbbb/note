@@ -1,0 +1,16 @@
+[core]
+	repositoryformatversion = 0
+	filemode = true
+	bare = false
+	logallrefupdates = true
+	ignorecase = true
+[user]
+	name = arcbbb
+[remote "github_note"]
+	url = https://arcbbb@github.com/arcbbb/note.git
+	fetch = refs/heads/*:refs/remotes/github_note/*
+[branch "master"]
+	remote = github_note
+	merge = refs/heads/master
+[merge]
+	conflictstyle = diff3

@@ -323,6 +323,7 @@ $ git log
 #### rebase
 	$ rebase -i
 #### config
+	$ git config -l
 	$ git config merge.conflictstyle diff3
 	// for pull to --rebase by default
 	$ git config branch.master.rebase true

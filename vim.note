@@ -89,8 +89,9 @@ vim today:01/14
     use r & b moving
     insert mode: repeat <C-a>, repeat & exit insert <C-@>
                  repeat previous/next line <C-y>, <C-e>
-		 move: <C>/<S>+left,right
-		 undo: <C-w>,<C-u>
+		 delete: C-h, C-w, C-u, C-k
+		 insert tab,newline: C-I,C-T,C-D,C-J
+		 move: C-G j/k,C/S-left,right
                  completion: <C-p>, <C-x><C-o>
 		 paste register: <C-r>, <C-r><C-r>
 		 abbrev: :ia <x> <y>,:iuna,:iabc   
