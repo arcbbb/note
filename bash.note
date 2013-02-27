@@ -5,13 +5,27 @@ declare -F
 declare -f
 unset -f
 
-command-line editing:
+command-line editing: Readline Library
+    vi:set -o vi
+       history: j,k
+    emacs:set -o emacs
+
+    bind:
+        function: bind -p
+	set: bind '"\C-x\C-r": re-read-init-file'
+	macro:bind -s
+	shell cmd:bind -x
+
+
 C-a/C-e: begin/end of line
 C-f/C-b: one char f/b movement
 M-f/M-b: one word f/b movement
 M-d/C-w: delete one word
 C-u/C-k: delete to the begin or end of line from cursor
 C-y: paste the deleted
+C-_ or C-x C-u: Undo
+repeat cmd: M-n command
+search commmand: C-r/C-s, C-g
 
 History:
 fc: Fix command
@@ -24,3 +38,13 @@ bind:
     history-search-backward
 alias:
 
+help
+mapfile,readarray: array creation
+read
+Bash Arithmatic
+    Shell expansion
+Array:
+    declare: declare -a/-A
+             NAME=(v1 .. vn)
+    reference: ${name[index]}
+    destroy: unset

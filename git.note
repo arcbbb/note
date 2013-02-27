@@ -68,8 +68,8 @@ Unmodified <--1 Modified <--2 Staged <--3 Commit
 	$ git rebase -i
 	squash/split apart commits
 	$ git reset
-	$ git commit
-	$ git rebase
+	$ loop: git add & commit
+	$ final step: git rebase --continue
 	rewrite a large number of commits
 	$ git filter-branch
 
@@ -273,7 +273,7 @@ $ git log
 	$ git stash pop
 	6. create a branch and switch to, then apply stash and drop.
 	$ git stash branch <name> <stash>
-#### grep
+#### file&content: ls-files & grep
 	only grep tracked files,
 	grep for only C source files
 	git grep -e ';;' -- '*.c' 
@@ -323,7 +323,11 @@ $ git log
 #### rebase
 	$ rebase -i
 #### config
+	View .git/config
 	$ git config -l
+	Edit .git/config
+	$ git config -e
+	Set  config
 	$ git config merge.conflictstyle diff3
 	// for pull to --rebase by default
 	$ git config branch.master.rebase true

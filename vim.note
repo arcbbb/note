@@ -344,3 +344,6 @@ C-w f
 	target:mt -> copy:mc, move:mm
         diff:md, edit:me,
 	vimgrep:mg, shell:mx
+:se ff
+:se ff=unix or dos
+digraph: C-V C-M //CR
