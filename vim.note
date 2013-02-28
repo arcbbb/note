@@ -82,6 +82,31 @@ motion
         {} block: aB,a{,a}
 	tag block: at <tag> </tag>
 	q string: a",a',a`
+buffer, window, tab page |windows.txt|
+   A buffer is the in-memory text of a file.
+   A window is a viewport on a buffer.
+   A tab page is a collection of windows.
+    buffer list:   :ls
+    buffer switch: :bu N,     N CTRL-^
+
+    window new: C-w n, C-w v, C-w s
+    window close : C-w q, C-w c
+    window only one window: C-w o
+
+    window N buffer:  :split #N, N CTRL-W ^ 
+    window tag,file: C-w ], C-w f
+
+    window switch: topleft     C-w t, last C-w p
+                   bottomright C-w b,
+		   next C-w w/W, goto Nth  N C-w w
+
+    window move: C-w r, C-w x
+                 C-w J, C-w K, C-w H, C-w L
+    window to tab: C-w T
+    window size: balance   :  C-w =
+		 set height:  z<N><CR>, C-w _ relative: C-w -,+
+		 set width : C-w |            relative: C-w <,>
+    Tab open file: C-w gf
 
 ######################################################################
 vim today:01/14
@@ -292,20 +317,6 @@ open file under cursor
 gf
 C-w f
     shift in insert mode: C-t,C-d
-|windows.txt|
-    new window: C-w n
-    close window: C-w q, C-w c
-    split window: C-w s , C-w v
-    only one window: C-w o
-    switch to window: top C-w t, bottom C-w b
-    move window: C-w r, C-w x
-                 C-w J, C-w K, C-w H, C-w L
-    window to tab: C-w T
-    window size: balance   :  C-w =
-		 set height:  z<N><CR>, C-w _ relative: C-w -,+
-		 set width : C-w |            relative: C-w <,>
-    open tag,file: C-w ], C-w f
-    open file in tab: C-w gf
 #preview window
     :pta
     C-w z
@@ -347,3 +358,9 @@ C-w f
 :se ff
 :se ff=unix or dos
 digraph: C-V C-M //CR
+filter:   :{range}!{filter} ![arg]
+help %s
+help :g
+preview window
+quickfix: 
+:ju

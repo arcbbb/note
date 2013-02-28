@@ -8,6 +8,11 @@ Hold space: keeps data between cycles
 
 {addressing}{cmd};...;
 
+addressing:
+    1. specify line number
+    2. STEPth line: N~i = line N, N+i
+    3. regexp
+
 command:
 normal cmd:
     r,w
