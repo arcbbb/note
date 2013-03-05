@@ -364,3 +364,12 @@ help :g
 preview window
 quickfix: 
 :ju
+range:
+line number representation
+. current line
+$ last line
+% = 1,$
+'t  position of mark t
+N:d<CR> :Nd<CR>
+change highlight color
+highlight Search ctermfg=0 ctermbg=2

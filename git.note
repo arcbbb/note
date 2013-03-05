@@ -1,3 +1,24 @@
+#### repo
+http://source.android.com/source/version-control.html
+http://www.instructables.com/id/Using-Googles-repo-command-in-your-own-projects/?ALLSTEPS
+Repository management tool.
+use git for local, repo for across-network.
+$ repo init -u ssh://git@bitbucket.org/miniat/default
+$ repo sync
+$ repo help
+########  default.xml
+<?xml version="1.0" encoding="UTF-8"?>
+<manifest>
+<remote  name="give it a unique name here"
+         fetch="url to repo with out server path" />
+<default revision="refs/heads/master"
+         remote="aosp"
+	 sync-j="4" />
+<project path="what to name the created directory"
+         name="git repo path on server"
+         remote="remote to associate with repository"/>
+         
+ </manifest>
 #### Gitk install
 1. cygwin: "xinit" and "X-start-menu-icons"
 2. .bashrc: export DISPLAY=:0.0.
