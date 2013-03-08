@@ -89,6 +89,9 @@ buffer, window, tab page |windows.txt|
     buffer list:   :ls
     buffer switch: :bu N,     N CTRL-^
 
+    :windo: operation on all window in current tab
+    :bufdo: operation on all buffer in bufferlist
+
     window new: C-w n, C-w v, C-w s
     window close : C-w q, C-w c
     window only one window: C-w o
@@ -373,3 +376,8 @@ $ last line
 N:d<CR> :Nd<CR>
 change highlight color
 highlight Search ctermfg=0 ctermbg=2
+
+" using :normal
+g/^\s*DEBUG/exe "norm! I/* \<Esc>A */\<Esc>"
+" using :substituting
+g/^\s*DEBUG/s!.*!/* & */!

@@ -236,6 +236,9 @@ $ git log
 	$ mkdir $COPY
 	$ git archive master | tar xCv $COPY
 	$ git archive master | bzip2 > master.tar.bz2
+	$ git archive master --prefix='project/'  --format=zip > project.zip
+	$ git archive -o latest.zip HEAD
+	format can be tar,tgz,zip: list on git archive -l
 
 
 #### bisect
@@ -356,3 +359,11 @@ $ git log
 	fetch remote branch as local branch
 	$ git fetch edk2i AddPchLpcPei:LpcPei
 	no effect .git/config
+#### alias
+	git config --global alias.br branch
+	git config --global alias.co checkout
+	git config --global alias.ci commit
+	git config --global alias.st status
+#### svn cat
+	git show <SHA>:path/file
+	git cat-file blob <SHA>:path/file
