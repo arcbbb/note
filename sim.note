@@ -19,6 +19,7 @@ qemu:
 3. apt-get install libtool
 4. apt-get install autoconf
 5. ./configure --target-list=x86_64-softmmu --prefix=$HOME/qemubin --static
+--enable-debug instead of --static
 6. make & make install
 
 run:
