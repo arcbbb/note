@@ -377,7 +377,19 @@ N:d<CR> :Nd<CR>
 change highlight color
 highlight Search ctermfg=0 ctermbg=2
 
-" using :normal
-g/^\s*DEBUG/exe "norm! I/* \<Esc>A */\<Esc>"
-" using :substituting
-g/^\s*DEBUG/s!.*!/* & */!
+:%s/\d\+/\=printf("%X", submatch(0))/g
+:g/^\s*DEBUG/s!.*!/* & */!
+
+execute Ex/Normal mode command:
+    exe {expr}: execute after evaluation, use '.' to concat string
+        :g//exe "norm I\<ESC>"
+        :sil lcd %:p:h | exe'!python '.expand('%') | sil lcd -
+	:execute 'while i < 5 | echo i | let i = i + 1 | endwhile'
+    norm {commands}
+        :g/^\s*DEBUG/exe "norm! I/* \<Esc>A */\<Esc>"
+[usr_41.txt]
+	b:name		variable local to a buffer
+	w:name		variable local to a window
+	g:name		global variable (also in a function)
+	v:name		variable predefined by Vim
+
