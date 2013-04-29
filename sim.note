@@ -42,6 +42,6 @@ $ dd if=/dev/zero of=file
 $ fdisk file
 mkfs
 ## mount partition
-$ mount -o loop,$((start block*512))
+$ mount -o loop,offset=$((start block*512))
 gdisk - manipulate guid partition table
 syslinux -https://wiki.archlinux.org/index.php/Syslinux
