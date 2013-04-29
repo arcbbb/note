@@ -367,3 +367,11 @@ $ git log
 #### svn cat
 	git show <SHA>:path/file
 	git cat-file blob <SHA>:path/file
+#### revision: git help revisions
+	r1..r2 = ^r1 r2, exclude r1
+	r1...r2 = like r1 xor r2
+#### create/apply patch
+	git format-patch xx --stdout > my.patch
+	git apply --stat my.patch
+	git apply --check my.patch
+	git apply my.patch

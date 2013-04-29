@@ -1,68 +1,71 @@
-load "C:\code\Rose310\Projects\RoseCityCrb\310\DEBUG_VS2008x86\IA32\Udk\001\IpmiPkg\IpmiManagerPei\IpmiManagerPei\DEBUG\IpmiManagerPei.efi" nocode at 0x00ffe803c0
 
-###################   DEBUG
-default:
-DebugLib|MdePkg/Library/BaseDebugLibNull/BaseDebugLibNull.inf
+### Memory:
+1. Pei Hob is read-only in Dxe
+
+### DEBUG Code
+## INF Updates
++[BuildOptions]
++  MSFT:*_*_*_CC_FLAGS = /Od /Oy-
++  C_FLAGS = $(C_FLAGS) /Od /Oy-
+
+__FUNCTION__ __FILE__ "%d" __LINE__
+
+Example 1:
+
+DEBUG((DEBUG_INFO, "InstallProtocolInterface: %g %p\n", Protocol, Interface));
+
+Example 2:
+
+DEBUG_CODE (
+    UINTN  ErrorLevel;
+)
+DEBUG_CODE (
+    DEBUG((ErrorLevel, "InstallProtocolInterface: %g %p\n", Protocol, Interface));
+)
+#### DEBUG ClassLibrary
+
+DebugLib|MdePkg/Library/BaseDebugLibNull/BaseDebugLibNull.inf       default
 	DebugPrint -> {}
 
-??:
-DebugLib|IntelFrameworkModulePkg/Library/PeiDxeDebugLibReportStatusCode/PeiDxeDebugLibReportStatusCode.inf
+        |IntelFrameworkModulePkg/Library/PeiDxeDebugLibReportStatusCode/PeiDxeDebugLibReportStatusCode.inf
 	DebugPrint -> ReportStatus
 
-DebugLib|MdePkg/Library/BaseDebugLibSerialPort/BaseDebugLibSerialPort.inf
+        |MdePkg/Library/BaseDebugLibSerialPort/BaseDebugLibSerialPort.inf
 	DebugPrint -> SerialPortWrite(SerialPortLib)
 
-	MdePkg/Library/BaseSerialPortLibNull/BaseSerialPortLibNull.inf
+	|MdePkg/Library/BaseSerialPortLibNull/BaseSerialPortLibNull.inf
 	SerialPortWrite -> {}
 
-	PcAtChipsetPkg/Library/SerialIoLib/SerialIoLib.inf
+	|PcAtChipsetPkg/Library/SerialIoLib/SerialIoLib.inf
 	SerialPortWrite -> IoWrite8 (gUartBase)
 
-	MdeModulePkg/Library/BaseSerialPortLib16550/BaseSerialPortLib16550.inf
+	|MdeModulePkg/Library/BaseSerialPortLib16550/BaseSerialPortLib16550.inf
 	16550 UART
 
-	RomleyPlatform:
-	ServerCommonPkg/Library/SerialPortLibUsb/SerialPortLibUsb.inf
-	SerialPortWrite -> UsbDbgOut
 
-	ServerCommonPkg/Library/SerialPortLib/SerialPortLib.inf
-	SerialPortWrite -> IoWrite8 (PcdGet64 (PcdSerialRegisterBase))
-
-
-Uefi driver&App:
-DebugLib|MdePkg/Library/UefiDebugLibConOut/UefiDebugLibConOut.inf
+        |MdePkg/Library/UefiDebugLibConOut/UefiDebugLibConOut.inf          Uefi driver&App
 	DebugPrint -> gST->ConOut->OutputString (gST->ConOut, Buffer);
-DebugLib|MdePkg/Library/UefiDebugLibStdErr/UefiDebugLibStdErr.inf  
+        |MdePkg/Library/UefiDebugLibStdErr/UefiDebugLibStdErr.inf          Uefi driver&App
 	DebugPrint -> gST->StdErr->OutputString (gST->StdErr, Buffer);
 
 PeCoffExtraActionLib|SourceLevelDebugPkg/Library/PeCoffExtraActionLibDebug/PeCoffExtraActionLibDebug.inf
 
-## INF Updates
-+[BuildOptions]
-+  MSFT:*_*_*_CC_FLAGS = /Od /Oy-
- C_FLAGS = $(C_FLAGS) /Od /Oy-
-################################
-code organization:
-1. grep "extern"
-   should be move to .h header file
-   no global guid instance, should be in AutoGen.c
-2. examine guid
-   every consumed sct guid should be checked
 
-#####################################################
-library not found
-edk1: .inf:lib,  global lib directory
-edk2: .inf:lib, .dsc:lib|path
+#### 
+Setting
 
-header not found
-edk2: .inf:[Packages], .dec:[Include]
+Override Pcd in dsc
+[PcdsPatchableInModule]
+  gEfiMdePkgTokenSpaceGuid.PcdDebugPrintErrorLevel|0x80000042
 
-how to build module
-edk1: add inf to module/Build/{Library|Pei|Dxe}.dsc
-edk2: add component to Build{Library|Pei|Dxe}.def
-#####################################################
-
-1. write INF
+EFI_D_* -> DEBUG_*
+DEBUG_GCD, DEBUG_CACHE
+DEBUG_WARN  0x0000-0002
+DEBUG_INFO  0x0000-0040
+DEBUG_VERBOSE 0x0040-0000
+DEBUG_ERROR 0x8000-0000
+###### INF MODULE_TYPE
+1. Tool definition
    determine include header in Autogen.h
    firmware type in FDF
 
@@ -85,11 +88,10 @@ edk2: add component to Build{Library|Pei|Dxe}.def
     "UEFI_APPLICATION"  :   ["Uefi.h",  "Library/BaseLib.h", "Library/DebugLib.h","Library/UefiApplicationEntryPoint.h"],
 
     "SMM_CORE"          :   ["PiDxe.h", "Library/BaseLib.h", "Library/DebugLib.h", "Library/UefiDriverEntryPoint.h"],
-
-   ####Grantley:PlatformPkg.fdf
+2. FDF definition
     [Rule.Common.DXE_SMM_DRIVER]
     FILE SMM
-
+3. Dispatcher behavior
         PeiDispatcher
 	   else if (SearchType == PEI_CORE_INTERNAL_FFS_FILE_DISPATCH_TYPE) {
 		if ((FfsFileHeader->Type == EFI_FV_FILETYPE_PEIM) ||
@@ -113,169 +115,29 @@ edk2: add component to Build{Library|Pei|Dxe}.def
 		  // EFI_FV_FILETYPE_FIRMWARE_VOLUME_IMAGE
 		  //
 		};
+#ReportStatus
 
-2. compile time:*.c *.h
-	 google the old code, and compare with the new code
-3. link time: .inf, .dec,   //needs reparsing
-     missing guid: add in .inf
-     	if producer, define in .dec
-4. remove SCT dependency:8
-	inf depex,
-	    4.1 grep OPTIN_, CONFIG_
-	.c MACRO -> PcdGet
-        .inf, .dec define Pcd
-	.dsc how to override Pcd?
-move to SCT:
-	Dxe\Setup\IpmiManager.vfr   // recover vfrcompile
+ReportStatus(CodeType, CodeValue)
+	CodeType
+	EFI_PROGRESS_CODE = 1
+	EFI_ERROR_CODE    = 2
+	EFI_DEBUG_CODE    = 3
 
-#### From EDK1 to EDK2
+#define EFI_ERROR_MINOR               0x40000000
+#define EFI_ERROR_MAJOR               0x80000000
+#define EFI_ERROR_UNRECOVERED         0x90000000
+#define EFI_ERROR_UNCONTAINED         0xa0000000
+                                       C40000002
+EFI_ERROR_MINOR + EFI_ERROR_CODE
 
-Check Entry prototype
-in edk1 check PEIM entry using macro
-in edk2 check PEIM entry using INF:ENTRYPOINT & autogen.h
+	CodeValue =  Class + Subclassd + Operation
+	V1030006
+Class     1000000  EFI_PERIPHERAL
+Subclass  0030000  EFI_PERIPHERAL_LOCAL_CONSOLE
+Operatoin 0000006  EFI_P_PC_DETECTED
 
-GUID instance
-in edk1 linked manually
-    guid.h,guid.c
-in edk2 linked with autogen.c generated from INF:[Ppi],DEC:[]
-    guid.h -> reference module.c
-           -> definition autogen.c -> use .inf -> define value .dec
-    how to check value defined in .dec with value defined in guid.h?
-    so value in guid.h is not really used/referenced.
-
-link-time
-.inf define LibraryClass
-.dec define LibraryClasses Prototype
-.dsc define LibraryClasses Instance
-
-library   <---- reference   module 
-.dec                        .inf: [Packages] pkg*.dec
-.inf                        .h  : include <*.h>
-                            .dsc: Lib|pkg*/lib*.inf
-
-.inf: MODULE_TYPE -> autogen.h, autogen.c
-Force Include:AutoGen.h, tools_def.txt: PP_FLAGS
-
-#### INF
-MODULE_TYPE choose from FDF[Rule] section
-#### FDF
-[Package]
-FILE_TYPE
-Ffs.py
-Firmware File
-
-GenC.pyi: "DXE_DRIVER"        :   ["PiDxe.h"]
-./MdePkg/Include/PiDxe.h:#include <Uefi/UefiSpec.h>
-./MdePkg/Include/PiSmm.h:#include <Uefi/UefiSpec.h>
-./MdePkg/Include/Uefi.h:#include <Uefi/UefiSpec.h>
-AutoGen.h
-
-#### edk2 debug
-notice Debug,c, Debug.h. Use GetPcd configuration
-ASSERT_EFI_ERROR(Status);
-ASSERT();
-#### Semantic Change
-ConvertTextToDevicePath    ->  EfiDevicePathFromTextProtocol->ConvertTextToDevicePath (DevicePathStr);
-                               when to AppendDevicePathInstance() ?
-GetNextGuidHob             ->  GetNextGuidHob
-
-
-#### Syntax Change
-Replace: 1.find 2.grep 3.awk 4. ex -s
-Macro,Enum Change
-    SCT_STATUS
-    SCT_STATUS_NOT_FOUND
-    SCT_STATUS_SUCCESS
-    SCT_STATUS_DEVICE_ERROR
-    SCT_STATUS_TIMEOUT
-    SCT_STATUS_INVALID_PARAMETER
-    SCT_STATUS_WARN_WRITE_FAILURE
-    SCT_STATUS_UNSUPPORTED
-    SCT_STATUS_OUT_OF_RESOURCES
-    EFI_EVENT_NOTIFY_SIGNAL -> EVT_NOTIFY_SIGNAL
-    EFI_EVENT_TIMER         -> EVT_TIMER
-    EFI_TPL_HIGH_LEVEL      -> TPL_HIGH_LEVEL
-    EFI_TPL_CALLBACK        -> TPL_CALLBACK
-    EFI_TPL_NOTIFY          -> TPL_NOTIFY
-    _CR                     -> BASE_CR @Base.h, CR @DebugLib.h
-
-Override
-    SCT_STATUS_INVALID_DATA      ->  EFI_INVALID_PARAMETER #CommonPorting.h
-    SCT_STATUS_INVALID_REQUEST   ->  EFI_UNSUPPORTED       #CommonPorting.h
-
-DEBUG
-Global Variable
-    gRT                       -> MdePkg.dec #include <Library/UefiRuntimeServicesTableLib.h>
-    gBS                       -> MdePkg.dec #include <Library/UefiBootServicesTableLib.h>
-Remove Function
-    DxeInitializeDriverLib    -> Remove #EDKII INF:CONSTRUCTOR, AutoGen.c:ProcessLibraryConstructorList
-MACRO related:
-    EFI_PROTOCOL_DEFINITION   -> Remove
-    EFI_FORWARD_DECLARATION   -> Remove
-    EFI_PEIM_ENTRY_POINT      -> Remove #EDKII INF:ENTRYPOINT, AutoGen.h
-    EFI_SIGNATURE_32          -> SIGNATURE_32
-    ASSERT_EFI_ERROR          -> #include <Library/DebugLib.h> //MdePkg.dec
-
-Guid C name changed:
-    gEfiRscHandlerPpiGuid       -> gEfiPeiRscHandlerPpiGuid
-    gPeiReadOnlyVariablePpiGuid -> gEfiPeiReadOnlyVariable2PpiGuid
-    gPeiStallPpiGuid            -> gEfiPeiStallPpiGuid
-    EFI_SMM_BASE_PROTOCOL_GUID  -> EFI_SMM_BASE2_PROTOCOL_GUID
-    EFI_SMM_CONTROL_PROTOCOL_GUID->EFI_SMM_CONTROL2_PROTOCOL_GUID
-
-TYPE Changed:
-    EFI_RSC_HANDLER_PPI        -> EFI_PEI_RSC_HANDLER_PPI
-    PEI_READ_ONLY_VARIABLE_PPI -> EFI_PEI_READ_ONLY_VARIABLE2_PPI
-    PEI_STALL_PPI              -> EFI_PEI_STALL_PPI
-    PEI_CPU_IO_PPI             -> EFI_PEI_CPU_IO_PPI
-Qualifier:
-    EFI_PEI_SERVICES           -> CONST EFI_PEI_SERVICES
-
-FLAG Changed:
-    ## Boot Service
-    CreateEvent():
-Service Changed:
-    PeiGetVariable        -> GetVariable   *arg
-	
-Library Changed:
-
-    EfiLibAllocateZeroPool     -> AllocateZeroPool #include <Library/MemoryAllocationLib.h>
-    EfiLibAllocatePool         -> AllocatePool     #include <Library/MemoryAllocationLib.h>
-    EfiCopyMem, EfiCommonLibCopyMem  -> CopyMem          #include <Library/BaseMemoryLib.h> MdePkg
-    EfiZeroMem                 -> ZeroMem
-    memcpy                     -> CopyMem //Initializing local variables, such as arrays or structures can
-                                       //sometimes lead to the compiler inserting a memcpy.
-    EfiStrCmp(CHAR16,CHAR16)   -> StrCmp           #BaseLib MdePkg
-
-    EfiLibGetSystemConfigurationTable -> EfiGetSystemConfigurationTable //is it the same?
-    GetPeiServices             -> GetPeiServicesTablePointer  #include <Library/PeiServicesTablePointerLib.h>
-
-    GetNextGuidHob(x,y,z,w)    -> GetNextGuidHob(x,y)
-
-    HexStringToBuf(UINT8,CHAR16) -> UnicodeStrToAsciiStr(CHAR16,CHAR8) #BaseLib MdePkg
-    sprintf, SPrint            -> UnicodeSPrint, AsciiSPrint  #Library/PrintLib.h MdePkg
-    strlen                     -> AsciiStrLen
-    
-Hii
-    IsConfigHdrMatch                    -> HiiIsConfigHdrMatch  #IfrSupport -> HiiLib.h MdeModulePkg
-    IfrLibSetString(1,2,3)              -> HiiSetString (1,2,3,NULL);
-    IfrLibNewString                     -> Id = HiiSetString (1,2,NULL)
-    HiiLibCreatePackageListDriverHandle -> InstallMultipleProtocols
-    HiiLibGetPackage                    -> buggy function
-    PreparePackageList, NewPackageList  -> HiiAddPackage
-    HiiLibIfrCreateOpcode               -> HiiAllocateOpCodeHandle 
-                                           HiiCreate.*OpCode 
-
-Structure Member Changed
-    ACPI_RESOURCE_HEADER_PTR  -> no raw member
-
-VfrCompile
-    exportdefaults
-
-SMM
-    EfiInitializeSmmDriverLib    -> dont trigger into SMM 
-
-Dxe library
-AcpiLibDuplicateResources
-AcpiLibAppendIoPortResource
-asctime_r
+        V1010004 
+EFI_PERIPHERAL
+EFI_PERIPHERAL_KEYBOARD 10000
+EFI_P_PC_ENABLE           004
+EFI_P_EC_NOT_CONFIGURED   004

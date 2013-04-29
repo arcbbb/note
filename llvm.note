@@ -19,3 +19,5 @@ llc: .bc -> llc -> .s or .c (-march=c)
     $ llc -O2 -march=arm -mcpu=cortex-a9 sample.bc -o sample.s
 
 llvm-dis, llvm-ar, bugpoint
+
+opt -dot-calgraph

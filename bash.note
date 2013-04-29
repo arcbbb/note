@@ -48,3 +48,7 @@ Array:
              NAME=(v1 .. vn)
     reference: ${name[index]}
     destroy: unset
+
+window column
+shopt -p | grep checkwinsize
+shopt -s checkwinsize
