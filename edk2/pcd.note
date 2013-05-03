@@ -1,0 +1,5 @@
+PCD format: from edk2 .DEC spec
+
+<Tokenspaceguid>.<PcdName>|DefaultValue|DatumType|Token
+
+

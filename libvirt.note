@@ -1,0 +1,11 @@
+
+http://wiki.libvirt.org/page/FAQ#What_is_libvirt.3F
+What is libvirt?
+    Libvirt = libvirtd, virsh, API library
+
+    $ virsh list --all
+'use libvirt' usually means manage virtual machine using tools such as 'virsh', 'virt-manager', or 'virt-install' 
+not directly use 'xm' or 'qemu-kvm'
+
+Support: LXC (Linux Container), OpenVZ, QEMU, UML (User-mode Linux), 
+	 Xen, VMWare, ...
