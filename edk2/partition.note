@@ -1,0 +1,101 @@
+
+CHS alignment
+Cylinder-Head-Sector
+1MiB alignment boundary
+
+################################################
+## Disk Layout: MBR disk layout or GPT disk layout
+## MBR disk layout: LBA0 = Legacy MBR
+## GPT disk layout: LBA0 = Protective MBR
+################################################
+
+
+## GPT disk layout
+LBA0 Protective MBR
+LBA1 Primary GPT Header
+LBAx Primary Partition GUID Array
+LBAy Primary Partition 1
+LBAz Primary Partition 2
+
+LBAw Backup Partition GUID Array
+last LBA Backup GPT Header
+
+###################################
+## MBR - Master Boot Record
+###################################
+EBR
+#32-bit LBA
+#4 Primary Partition
+
+Legacy MBR
+Bootcode           offset:0    size:424
+Disk Sig           offset:440  size:4
+Unknown            offset:444  size:2
+Partition Record   offset:446  size:16*4
+
+	Legacy MBR Partition Record
+	BootIndicator  offset:0  size:1   // 0x80 = bootable
+	StartingCHS    offset:1  size:3
+	OSType         offset:4  size:1   // type of partition
+	                                     0x0  : ignored
+					     0xEE : GPT Protective
+	                                     0xEF : UEFI System Partition
+	EndingCHS      offset:5  size:3
+	StartingLBA    offset:8  size:4
+	SizeInLBA      offset:12 size:4   // size of partition in LBA units
+
+Signature          offset:510  size:2r    // should be 0xAA55
+
+###################################
+## GPT - Guid Partition Table
+###################################
+#64-bit LBA
+#> 4 Primary Partition
+#redundant backup
+
+####    Protective MBR
+BootCode           offset:0    size:440     // unused
+Disk Sig           offset:440  size:4       // unused
+Unknown            offset:444  size:2       // unused
+Partition Record   offset:446  size:16*4
+        one partition record
+		BootIndicator  offset:0     // 0x80 = bootable, set to 0x0
+		StartingCHS    offset:1     // 0x000200, StartingLBA
+		OSType         offset:4     // 0xEE (GPT Protective)
+		EndingCHS      offset:5     // 0xFFFFFF
+		StartingLBA    offset:8     // 0x00000001
+		SizeInLBA      offset:12    // 0xFFFFFFFF, size of the *disk* minus one.
+	three partition records each set to zero
+Signature          offset:510  size:2r    // should be 0xAA55
+
+####    GPT Header
+Signature          offset:0    size:8       // "EFI PART" = 0x5452415020494645.
+Revision           offset:8    size:4       // 1.0 = 0x00010000
+HeaderSize         offset:12   size:4       // size in bytes of GPT header
+                                               92 < size < logical block size
+HeaderCRC32        offset:16   size:4       // CRC32 checksum for GPT header structure
+Reserved           offset:20   size:4       // must be zero
+MyLBA              offset:24   size:8       // LBA of GPT Header, 1 = Primary GPT Header
+AlternateLBA       offset:32   size:8
+FirstUsableLBA     offset:40   size:8
+LastUsableLBA      offset:48   size:8
+DiskGUID           offset:56   size:16
+PartitionEntryLBA  offset:72   size:8       // start of GUID Partition Entry Array
+NumberofPartitionEntries  offset:80  size:4
+SizeofPartitionEntry offset:84  size:4      // 128 * 2 * n
+PartitionEntryArrayCRC32  offset:88  size:4 //
+
+####    GUID Partition Entry Array
+PartitionTypeGUID   offset:0   size:16      // like OS Type
+                    Unused Entry:  all zero
+                    EFI System Partition:C12A7328-F81F-11D2-BA4B-00A0C93EC93B
+
+UniquePartitionGUID offset:16  size:16
+StartingLBA         offset:32  size:8       // starting LBA of the partition
+EndingLBA           offset:40  size:8       // ending LBA of the partition
+Attributes          offset:48  size:8
+PartitionName       offset:56  size:72      // null-terminated string
+Reserved            offset:128
+
+???  BIOS Boot Partition GUID: {21686148-6449-6E6F-744E-656564454649}
+                           "Hah!IdontNeedEFI"

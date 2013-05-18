@@ -1,2 +1,8 @@
 Cirrus Logic 5446 Video Controller
 OvmfPkg/QemuVideoDxe
+
+
+$ qemu-img create -f qcow2 ubuntu.img 3G
+Formatting 'ubuntu.img', fmt=qcow2 size=3221225472 encryption=off cluster_size=65536 
+
+$ kvm -m 2048 -bios ~/bios/ovmf.fd -hda ubuntu.img

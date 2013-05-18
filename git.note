@@ -375,3 +375,10 @@ $ git log
 	git apply --stat my.patch
 	git apply --check my.patch
 	git apply my.patch
+#### today tmp
+git log --oneline --decorate
+git diff --word-diff
+## push & set tracking
+git push -u origin master
+## checkout a branch, rebase and merge to master
+git rebase HEAD branch && git rebase HEAD @{-2}

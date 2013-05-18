@@ -1,11 +1,14 @@
 ## Getting Started
 http://llvm.org/docs/GettingStarted.html
-git
+# git repo
 % git clone http://llvm.org/git/llvm.git
 % cd llvm/tools
 % git clone http://llvm.org/git/clang.git
 
 $ env CFLAGS=-fno-strict-aliasing CXXFLAGS=-fno-strict-aliasing cmake -i ~/share/git/llvm
+## Tools
+# llvm-as, llvm-dis, llvm-link, llvm-prof, llvmc
+####  assembly .ll, bytecode .bc
 
 clang -emit-llvm
 -S: .ll
@@ -21,3 +24,17 @@ llc: .bc -> llc -> .s or .c (-march=c)
 llvm-dis, llvm-ar, bugpoint
 
 opt -dot-calgraph
+
+### llvm - opt: LLVM Optimizer
+### graphviz - dot: filter for drawing directed graph
+$ clang -emit-llvm -o - | opt -analyze -std-link-opts -dot-callgraph
+$ cat callgraph.dot | dot -Tpng -ocallgraph.png
+### graphviz
+digraph G {
+	n1 -> n20 
+	n1 -> n21 
+	n1 -> n22 
+	n20 -> n3 
+	n21 -> n3 
+	n22 -> n3
+}

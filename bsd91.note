@@ -35,6 +35,9 @@ Stage 1 and 2   /boot/boot
 
 Install boot1 & boot2 bsdlabel(8)
 # bsdlabel -B diskslice
+	boot1  512 bytes
+	boot2 7680 bytes
+	boot  8192 bytes
 
 #Stage 3 /boot/loader  loader(8)
 	read /boot/loader.rc   <-- /boot/defaults/loader.conf+/boot/loader.conf
